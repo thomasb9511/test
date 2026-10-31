@@ -220,14 +220,14 @@ public partial class BurnViewModel : ObservableObject
             CalibrationTarget? target = _shell.Calibration.Target;
             if (target is null)
             {
-                SourceTitle = "[EN]calibration[EN]";
+                SourceTitle = "Calibration Pattern";
                 SourceDetails = "[EN]Assisted Calibration[EN]，[EN]Burn。";
                 identity = "calibration:none";
             }
             else
             {
                 CalibrationParameters p = target.Parameters;
-                SourceTitle = $"calibration[EN] · {FamilyLabel} · {target.Id[..8]}";
+                SourceTitle = $"Calibration Pattern · {FamilyLabel} · {target.Id[..8]}";
                 string encoding = p.Kind switch
                 {
                     CalibrationDiscKind.BluRay => $"Bit Length {p.LinearDensity:0.######} nm · "

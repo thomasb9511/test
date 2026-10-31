@@ -326,7 +326,7 @@ public partial class DiscParametersState : ObservableObject
         string id = $"user-{familyToken}-{now:yyyyMMdd-HHmmss}-{Guid.NewGuid().ToString("N")[..4]}";
         string note = string.Create(
             System.Globalization.CultureInfo.InvariantCulture,
-            $"[EN]：Inner Radius {innerRadiusMm:0.###} mm、Outer Radius {outerRadiusMm:0.###} mm、{sectors:N0} sectors。");
+            $"User preset: Inner Radius {innerRadiusMm:0.###} mm、Outer Radius {outerRadiusMm:0.###} mm、{sectors:N0} sectors。");
         DiscPresetJsonDocument updated = family switch
         {
             OpticalDiscFamily.Dvd => user with

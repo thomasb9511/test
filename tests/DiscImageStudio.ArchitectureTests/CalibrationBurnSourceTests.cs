@@ -123,7 +123,7 @@ internal static class CalibrationBurnSourceTests
         string label, OpticalBurnMediaKind mediaKind)
     {
         BurnViewModel burn = shell.Burn;
-        Require(burn.FamilyLabel == label && burn.SourceTitle.StartsWith($"calibration [EN]  · {label} · ", StringComparison.Ordinal),
+        Require(burn.FamilyLabel == label && burn.SourceTitle.StartsWith($"Calibration Pattern · {label} · ", StringComparison.Ordinal),
             $"{label} header and source title agree");
         Require(burner.SpeedQueries[^1] == mediaKind, $"{label} speed query agrees with the target");
         Require(burn.IsBluRayBurn == (label == "BD") && burn.IsDvdBurn == (label == "DVD"),

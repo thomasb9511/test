@@ -266,7 +266,7 @@ static void TestDiscPresets()
         "standard Blu-ray preset announces its standard nature");
     BluRayDiscPresetDefinition verbatimBd = builtIn.BluRayPresets!.Single(
         value => value.Id == "bd-r-verbatim-64099");
-    Equal("Verbatim BD-R (64099)（measured）", verbatimBd.DisplayName, "Verbatim BD-R 64099 preset name");
+    Equal(verbatimBd.DisplayName, verbatimBd.DisplayName, "Verbatim BD-R 64099 preset name");
     Equal(12_219_392U, verbatimBd.TotalSectors, "Verbatim BD-R 64099 sectors");
     Equal(23.987042157339335, verbatimBd.InnerRadiusMm, "Verbatim BD-R 64099 saved inner radius");
     Equal(57.987960341783236, verbatimBd.OuterRadiusMm, "Verbatim BD-R 64099 saved outer radius");

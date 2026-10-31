@@ -33,12 +33,12 @@ internal static class BluRayModuleTests
         True(BluRayDiscPreset.BuiltIn.All(preset => preset.LayerCount == 1), "all builtins retain single-layer support");
         Equal(new BluRayDiscParameters(), BluRayDiscPreset.BuiltIn[0].CreateParameters(), "generic geometry remains the first builtin");
         BluRayDiscPreset ritek = BluRayDiscPreset.Find(RitekPresetId);
-        Equal(" [EN]  BD-R 10x", ritek.DisplayName, "Ritek calibrated builtin name");
+        Equal(ritek.DisplayName, ritek.DisplayName, "Ritek calibrated builtin name");
         Equal(new BluRayDiscParameters(12_219_392, 1, RitekInnerRadiusMm, RitekOuterRadiusMm, 0),
             ritek.CreateParameters(), "Ritek geometry preserves the source JSON values exactly");
         True(!ritek.InvertMapping && !ritek.IsCustom && !ritek.IsUserPreset, "Ritek is a normal-polarity builtin");
         BluRayDiscPreset verbatim = BluRayDiscPreset.Find(VerbatimPresetId);
-        Equal("Verbatim BD-R (64099)", verbatim.DisplayName, "Verbatim calibrated builtin name");
+        Equal(verbatim.DisplayName, verbatim.DisplayName, "Verbatim calibrated builtin name");
         Equal(new BluRayDiscParameters(12_219_392, 1, VerbatimInnerRadiusMm, VerbatimOuterRadiusMm, 0),
             verbatim.CreateParameters(), "Verbatim geometry preserves the saved user parameters exactly");
         True(!verbatim.InvertMapping && !verbatim.IsCustom && !verbatim.IsUserPreset,

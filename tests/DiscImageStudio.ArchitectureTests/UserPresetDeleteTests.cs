@@ -48,14 +48,14 @@ internal static class UserPresetDeleteTests
 
             string savedName = state.AddUserPreset(
                 OpticalDiscFamily.CompactDisc,
-                " [EN]  CD  [EN] ",
+                "Regression CD Parameters",
                 24.5,
                 56.8,
                 359_849);
-            Require(savedName == " [EN]  CD  [EN] ", "saved preset reports the name it was given");
+            Require(savedName == "Regression CD Parameters", "saved preset reports the name it was given");
             CdDiscPreset saved = state.CdPresets.Single(preset => preset.DisplayName == savedName);
             Require(
-                saved.Description.StartsWith(" [EN] ：", StringComparison.Ordinal),
+                saved.Description.StartsWith("User preset:", StringComparison.Ordinal),
                 "preset description is derived from the geometry instead of a hand-written note");
             Require(
                 DiscPresetJsonStore.Load(presetPath).CdPresets.Any(preset => preset.DisplayName == savedName),
