@@ -53,7 +53,7 @@ internal static class BluRayFlushDiagnosticsTests
         Exception actual = RunBurn(session, warnings.Add) ?? throw new InvalidOperationException("Expected WRITE failure.");
         Require(ReferenceEquals(actual, session.WriteFailure), "failed cleanup retains the original write exception");
         Require(warnings.Count == 1 && warnings[0].Contains("0x8007048F", StringComparison.Ordinal)
-            && warnings[0].Contains("耗时", StringComparison.Ordinal)
+            && warnings[0].Contains(" [EN] ", StringComparison.Ordinal)
             && warnings[0].Contains(session.FlushFailure!.Message, StringComparison.Ordinal),
             "flush diagnostic includes its HRESULT, elapsed time and message");
         Require(session.Operations.SequenceEqual(new[] { "acquire", "read", "configure", "write", "flush", "release" }),

@@ -14,7 +14,7 @@ internal static class ParameterParser
             return result;
         }
 
-        throw new FormatException($"{fieldName}不是有效数字。");
+        throw new FormatException($"{fieldName}[EN]。");
     }
 
     internal static double ParsePositiveDouble(string raw, string fieldName)
@@ -22,7 +22,7 @@ internal static class ParameterParser
         double result = ParseDouble(raw, fieldName);
         return double.IsFinite(result) && result > 0
             ? result
-            : throw new ArgumentOutOfRangeException(fieldName, $"{fieldName}必须大于 0。");
+            : throw new ArgumentOutOfRangeException(fieldName, $"{fieldName}must be greater than 0。");
     }
 
     internal static int ParsePositiveInt(string raw, string fieldName)
@@ -30,7 +30,7 @@ internal static class ParameterParser
         string value = raw.Trim();
         return int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int result) && result > 0
             ? result
-            : throw new FormatException($"{fieldName}必须是正整数。");
+            : throw new FormatException($"{fieldName}must[EN]。");
     }
 
     internal static long ParsePositiveLong(string raw, string fieldName)
@@ -38,7 +38,7 @@ internal static class ParameterParser
         string value = raw.Trim();
         return long.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out long result) && result > 0
             ? result
-            : throw new FormatException($"{fieldName}必须是正整数。");
+            : throw new FormatException($"{fieldName}must[EN]。");
     }
 
     internal static long ParseNonNegativeLong(string raw, string fieldName)
@@ -46,22 +46,22 @@ internal static class ParameterParser
         string value = raw.Trim();
         return long.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out long result) && result >= 0
             ? result
-            : throw new FormatException($"{fieldName}必须是非负整数。");
+            : throw new FormatException($"{fieldName}must[EN]。");
     }
 
     internal static int ParsePreviewSize(string raw)
     {
-        int size = ParsePositiveInt(raw, "预览尺寸");
+        int size = ParsePositiveInt(raw, "Preview size");
         return size is >= 64 and <= 8192
             ? size
-            : throw new ArgumentOutOfRangeException(nameof(raw), "预览尺寸必须在 64–8192 px 之间。");
+            : throw new ArgumentOutOfRangeException(nameof(raw), "Preview sizemust[EN] 64–8192 px [EN]。");
     }
 
     internal static int ParsePreviewSamples(string raw, int maximum)
     {
-        int samples = ParsePositiveInt(raw, "每扇区采样");
+        int samples = ParsePositiveInt(raw, "Samples per sector");
         return samples <= maximum
             ? samples
-            : throw new ArgumentOutOfRangeException(nameof(raw), $"每扇区采样必须在 1–{maximum} 之间。");
+            : throw new ArgumentOutOfRangeException(nameof(raw), $"Samples per sectormust[EN] 1–{maximum} [EN]。");
     }
 }

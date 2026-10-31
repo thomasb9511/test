@@ -62,16 +62,16 @@ public class PreviewInspectorViewModel : ObservableObject
 
     public string ArtifactLabel => _family switch
     {
-        OpticalDiscFamily.Dvd => "生成的 DVD ISO",
-        OpticalDiscFamily.BluRay => "生成的蓝光 ISO",
-        _ => "生成的 CD 音轨或 ISO",
+        OpticalDiscFamily.Dvd => "Generated DVD ISO",
+        OpticalDiscFamily.BluRay => "Generated Blu-ray ISO",
+        _ => "Generated CD track or ISO",
     };
 
     public string ArtifactHint => _family switch
     {
-        OpticalDiscFamily.Dvd => "可直接粘贴或浏览已生成的 ISO 镜像。",
-        OpticalDiscFamily.BluRay => "可直接粘贴或浏览已生成的 ISO；同名 sidecar 会带回几何与影调。",
-        _ => "可选择 WAV / RAW 音轨或 CD 数据盘 ISO。",
+        OpticalDiscFamily.Dvd => "[EN]Browse[EN] ISO [EN]。",
+        OpticalDiscFamily.BluRay => "[EN]Browse[EN] ISO；[EN] sidecar [EN]Tone。",
+        _ => "[EN] WAV / RAW audio track[EN] CD Data Disc ISO。",
     };
 
     public ICommand BrowseArtifactCommand => _family switch

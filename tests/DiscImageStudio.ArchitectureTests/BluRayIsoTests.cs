@@ -73,13 +73,13 @@ internal static class BluRayIsoTests
     private static void TestInnerFiles(string directory)
     {
         string source = Path.Combine(directory, "inner");
-        Directory.CreateDirectory(Path.Combine(source, "资料"));
+        Directory.CreateDirectory(Path.Combine(source, " [EN] "));
         byte[] content = Enumerable.Range(0, 80001).Select(i => (byte)(i * 17)).ToArray();
         File.WriteAllBytes(Path.Combine(source, "large.bin"), content);
-        byte[] unicodeContent = Encoding.UTF8.GetBytes("蓝光内圈文件\n");
-        File.WriteAllBytes(Path.Combine(source, "资料", "说明.txt"), unicodeContent);
+        byte[] unicodeContent = Encoding.UTF8.GetBytes("Blu-rayInner Ring [EN] \n");
+        File.WriteAllBytes(Path.Combine(source, " [EN] ", " [EN] .txt"), unicodeContent);
         File.WriteAllBytes(Path.Combine(source, "empty.txt"), []);
-        BluRayIsoPlan plan = BluRayIsoGenerator.Prepare(new(TotalSectors: 1024), source, "蓝光_TEST");
+        BluRayIsoPlan plan = BluRayIsoGenerator.Prepare(new(TotalSectors: 1024), source, "Blu-ray_TEST");
         Require(plan.FileCount == 3 && plan.DirectoryCount == 2 && plan.FileBytes == content.Length + unicodeContent.Length,
             "plan snapshots inner-file sizes and nested directories");
         Require(plan.DrawingStartSector > BluRayIsoGenerator.Prepare(plan.Disc).DrawingStartSector && plan.DrawingStartRadiusMm > plan.Disc.InnerRadiusMm,
@@ -87,9 +87,9 @@ internal static class BluRayIsoTests
         using MemoryStream output = new();
         BluRayIsoGenerator.GenerateToStream(output, plan, new AddressMapping());
         byte[] iso = output.ToArray();
-        Dictionary<string, byte[]> files = UdfFilesystemTests.Inspect(iso, 1024, "蓝光_TEST", plan.DrawingStartSector, plan.DrawingEndSectorExclusive);
+        Dictionary<string, byte[]> files = UdfFilesystemTests.Inspect(iso, 1024, "Blu-ray_TEST", plan.DrawingStartSector, plan.DrawingEndSectorExclusive);
         Require(files.Count == 3 && files["large.bin"].SequenceEqual(content)
-            && files["资料/说明.txt"].SequenceEqual(unicodeContent) && files["empty.txt"].Length == 0,
+            && files[" [EN] / [EN] .txt"].SequenceEqual(unicodeContent) && files["empty.txt"].Length == 0,
             "independent UDF traversal recovers nested Unicode names and exact file data");
         BluRayImagePayloadMapping image = new(plan.Disc, new BluRayGray8Raster(1, 1, [0]), new BluRayRunLengthMapping());
         Require(image.GetPosition(plan.DrawingStartSector, 0).TrackPoint.RadiusMm > plan.Disc.InnerRadiusMm + 10,

@@ -35,7 +35,7 @@ internal static class CdDataDaoWorkflowTests
                 "DAO checks prepared-media lead-out before writing");
             Require(request.ContentLength == 359845L * 2048 && image.StartOfLeadout == sectors,
                 "capacity handling preserves all ISO sectors and the preset's lead-out");
-            Require(operations.Contains("构造 CD DAO 数据轨") && operations.Contains("写入 CD DAO 数据轨"),
+            Require(operations.Contains(" [EN]  CD DAO  [EN] ") && operations.Contains(" [EN]  CD DAO  [EN] "),
                 "data DAO is identified in diagnostics");
         }
         RecordingCdRawSession tooSmall = new() { LastLeadoutSector = sectors - 4 };
@@ -47,7 +47,7 @@ internal static class CdDataDaoWorkflowTests
         }
         catch (InvalidOperationException exception)
         {
-            Require(exception.Message.Contains("超出盘片边界 4 个扇区")
+            Require(exception.Message.Contains("exceedsDisc Media [EN]  4  sectors")
                 && !tooSmall.Calls.Contains("WriteMedia") && tooSmall.Calls[^1] == "ReleaseMedia",
                 "data DAO retains the existing strict three-sector overburn bound and cleanup");
         }

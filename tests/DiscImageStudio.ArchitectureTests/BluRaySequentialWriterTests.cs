@@ -138,9 +138,9 @@ internal static class BluRaySequentialWriterTests
                 TimeSpan.FromMilliseconds((command + 1) * 100), TimeSpan.FromMilliseconds((command + 1) * 10)),
                 "the ring preserves only the newest successes in chronological order with their own timings");
         }
-        Require(error.Message.Contains("最近 8 次成功 WRITE", StringComparison.Ordinal)
-            && error.Message.Contains("累计源流读取", StringComparison.Ordinal)
-            && error.Message.Contains("累计 WRITE 命令", StringComparison.Ordinal),
+        Require(error.Message.Contains("Recent 8  [EN] succeeded WRITE", StringComparison.Ordinal)
+            && error.Message.Contains(" [EN] ", StringComparison.Ordinal)
+            && error.Message.Contains(" [EN]  WRITE  [EN] ", StringComparison.Ordinal),
             "the bounded snapshot is attached to the propagated error text for normal failure logs");
     }
 
@@ -191,22 +191,22 @@ internal static class BluRaySequentialWriterTests
             "diagnostics wait at least ten seconds between ordinary reports and flush the final shorter window");
         string first = diagnostics[0].Message;
         string last = diagnostics[1].Message;
-        Require(first.Contains($"窗口 {12.0:F3} 秒", StringComparison.Ordinal)
-            && first.Contains($"设备接受速度={0.016384:F3} MB/s", StringComparison.Ordinal)
-            && first.Contains($"={3.0:F3} 秒（{25.0:F1}%）", StringComparison.Ordinal)
-            && first.Contains($"={9.0:F3} 秒（{75.0:F1}%）", StringComparison.Ordinal)
-            && first.Contains($"累计接受={3L * BluRaySequentialWriter.BytesPerWrite:N0} 字节", StringComparison.Ordinal),
+        Require(first.Contains($" [EN]  {12.0:F3} seconds", StringComparison.Ordinal)
+            && first.Contains($" [EN] ={0.016384:F3} MB/s", StringComparison.Ordinal)
+            && first.Contains($"={3.0:F3} seconds（{25.0:F1}%）", StringComparison.Ordinal)
+            && first.Contains($"={9.0:F3} seconds（{75.0:F1}%）", StringComparison.Ordinal)
+            && first.Contains($" [EN] ={3L * BluRaySequentialWriter.BytesPerWrite:N0} bytes", StringComparison.Ordinal),
             "the first diagnostic reports its accepted-byte rate, separate read/command durations and shares, and cumulative bytes");
-        Require(!first.Contains("最后窗口", StringComparison.Ordinal)
-            && last.Contains("最后窗口", StringComparison.Ordinal)
-            && last.Contains($"窗口 {8.0:F3} 秒", StringComparison.Ordinal)
-            && last.Contains($"={2.0:F3} 秒（{25.0:F1}%）", StringComparison.Ordinal)
-            && last.Contains($"={6.0:F3} 秒（{75.0:F1}%）", StringComparison.Ordinal)
-            && last.Contains($"累计接受={5L * BluRaySequentialWriter.BytesPerWrite:N0} 字节", StringComparison.Ordinal),
+        Require(!first.Contains(" [EN] ", StringComparison.Ordinal)
+            && last.Contains(" [EN] ", StringComparison.Ordinal)
+            && last.Contains($" [EN]  {8.0:F3} seconds", StringComparison.Ordinal)
+            && last.Contains($"={2.0:F3} seconds（{25.0:F1}%）", StringComparison.Ordinal)
+            && last.Contains($"={6.0:F3} seconds（{75.0:F1}%）", StringComparison.Ordinal)
+            && last.Contains($" [EN] ={5L * BluRaySequentialWriter.BytesPerWrite:N0} bytes", StringComparison.Ordinal),
             "the last report resets the window's counters while retaining cumulative accepted bytes");
-        Require(first.Contains("含阻塞/拷贝", StringComparison.Ordinal)
-            && first.Contains("含传输/设备等待", StringComparison.Ordinal)
-            && first.Contains("不是纯 CPU 生成耗时", StringComparison.Ordinal),
+        Require(first.Contains(" [EN] / [EN] ", StringComparison.Ordinal)
+            && first.Contains(" [EN] / [EN] ", StringComparison.Ordinal)
+            && first.Contains(" [EN]  CPU  [EN] ", StringComparison.Ordinal),
             "diagnostic labels state the measured boundaries instead of claiming CPU generation or laser speed");
 
         now = TimeSpan.Zero;
@@ -219,7 +219,7 @@ internal static class BluRaySequentialWriterTests
         BluRaySequentialWriter.Write(exactTransport, exactSource, 64, elapsed: () => now,
             reportDiagnostics: message => diagnostics.Add((now, message)));
         Require(diagnostics.Count == 1 && diagnostics[0].At == TimeSpan.FromSeconds(10)
-            && diagnostics[0].Message.Contains("最后窗口", StringComparison.Ordinal),
+            && diagnostics[0].Message.Contains(" [EN] ", StringComparison.Ordinal),
             "completion exactly at the ten-second boundary produces one report rather than a duplicate final report");
     }
 

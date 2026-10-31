@@ -50,7 +50,7 @@ internal static class CdAudioCompatibilityTests
     {
         string name = interleave ? "interleaved" : "plain";
         string rawPath = Path.Combine(directory, name + ".raw");
-        string wavPath = Path.Combine(directory, name + " 音轨.WAV");
+        string wavPath = Path.Combine(directory, name + " audio track.WAV");
         CdGenerationSummary rawSummary = CdTrackGenerator.Generate(
             sourcePath, rawPath, parameters, interleave);
         CdTrackGenerator.Generate(sourcePath, wavPath, parameters, interleave);
@@ -122,7 +122,7 @@ internal static class CdAudioCompatibilityTests
         True(result.Succeeded, "CD command generates WAV successfully");
         ValidateCueFile(outputPath);
         True(
-            File.ReadAllBytes(Path.Combine(directory, "interleaved 音轨.WAV"))
+            File.ReadAllBytes(Path.Combine(directory, "interleaved audio track.WAV"))
                 .SequenceEqual(File.ReadAllBytes(outputPath)),
             "CD command WAV matches file generation API");
 

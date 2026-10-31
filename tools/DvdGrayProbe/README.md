@@ -1,14 +1,14 @@
-# DVD 64 / E4 灰阶与混合测试
+# DVD 64 / E4 Grayscale [EN] 
 
-本工具为 **Verbatim DVD-R AZO 43533** 制作一张对比测试盘：以已测试的 `A5 / 66 / B9 / 92` 为对照，比较 `64`、`E4` 替换 `66` 后的纯色、抖动混合和实际图片效果，并单独测试 `64` 与 `E4` 混在一起的效果。工具负责生成和验证镜像，不执行刻录。
+ [EN]  **Verbatim DVD-R AZO 43533**  [EN] ： [EN]  `A5 / 66 / B9 / 92`  [EN] ， [EN]  `64`、`E4`  [EN]  `66`  [EN] 、Dither [EN] ， [EN]  `64`  [EN]  `E4`  [EN] 。 [EN] ， [EN] Burn。
 
-所有 byte 均指 **DVD 扰码后的目标 Q 字节**。图集直接指定 Q；生成时用最近邻读取，不进行双线性插值或重新灰度分档。
+ [EN]  byte  [EN]  **DVD scrambling [EN]  Q bytes**。 [EN]  Q； [EN] Recent [EN] ， [EN] grayscale [EN] 。
 
-## 生成与验证
+##  [EN] 
 
-需要 Windows 和 .NET 10 SDK。自行准备 `6000 × 6000` 的四阶灰度 PNG；工具固定读取左上坐标 `(2880, 1920)`、大小 `640 × 640` 的区域。该区域转换为 Gray8 后只能含 `0 / 85 / 170 / 255`，尺寸或灰度不符会拒绝生成。工具不缩放、不重新抖动输入，仓库不附带示例源图。
+ [EN]  Windows  [EN]  .NET 10 SDK。 [EN]  `6000 × 6000`  [EN] grayscale PNG； [EN]  `(2880, 1920)`、 [EN]  `640 × 640`  [EN] 。 [EN]  Gray8  [EN]  `0 / 85 / 170 / 255`， [EN] grayscale [EN] 。 [EN] 、 [EN] Dither [EN] ， [EN] 。
 
-在仓库根目录运行，将 `four-level-6000.png` 替换为自己的输入路径；`prepare` 的输出目录必须为空：
+ [EN] directory [EN] ， [EN]  `four-level-6000.png`  [EN] path；`prepare`  [EN] directorymust [EN] ：
 
 ```powershell
 dotnet run --project tools/DvdGrayProbe --configuration Release -- prepare --source "four-level-6000.png" --output-dir "artifacts/dvd-gray-probe-64-e4"
@@ -18,75 +18,75 @@ dotnet run --project tools/DvdGrayProbe --configuration Release -- generate --pr
 dotnet run --project tools/DvdGrayProbe --configuration Release -- verify --prepared "artifacts/dvd-gray-probe-64-e4" --iso "artifacts/dvd-gray-probe-64-e4/burn.iso"
 ```
 
-输出文件：
+ [EN] ：
 
-| 文件 | 用途 |
+|  [EN]  |  [EN]  |
 |---|---|
-| `burn.iso` | 实际刻录的整盘镜像，2,297,888 个 2048-byte 扇区，共 4,706,074,624 bytes |
-| `burn.iso.json` | 镜像生成记录与校验信息 |
-| `probe.json` | 布局、源图及参数记录 |
-| `atlas.q8` | 6000 × 6000 的直接 Q 目标图集 |
-| `code-map.png` | 用颜色区分 Q 字节的布局导览；颜色不代表盘面真实颜色或亮度 |
-| `nominal-preview.png` | 按名义灰度绘制的预览；用于辨认内容，不能预测刻录后的明暗 |
+| `burn.iso` |  [EN] Burn [EN] ，2,297,888  [EN]  2048-byte sectors， [EN]  4,706,074,624 bytes |
+| `burn.iso.json` |  [EN]  |
+| `probe.json` |  [EN] 、 [EN]  |
+| `atlas.q8` | 6000 × 6000  [EN]  Q  [EN]  |
+| `code-map.png` |  [EN]  Q bytes [EN] ； [EN] disc surface [EN] Brightness |
+| `nominal-preview.png` |  [EN] grayscale [EN] ； [EN] ，cannot [EN] Burn [EN]  |
 
-`burn.iso` 是有意不含文件系统的扇区镜像，不能正常挂载是预期行为。刻录时使用刻录软件的 **“写入镜像 / Write image file to disc”** 功能选择它；不要把它作为普通文件加入数据盘。使用 43533 盘片，并沿用上次测试的刻录机和速度，以便比较。
+`burn.iso`  [EN] sectors [EN] ，cannot [EN] 。Burn [EN] Burn [EN]  **“ [EN]  / Write image file to disc”**  [EN] ； [EN] 。 [EN]  43533 Disc Media， [EN] Recorder [EN] ， [EN] 。
 
-**不要将两个导览 PNG 送入旧的灰度图片生成流程。** 那样会重新量化，无法保留这张测试盘指定的 `64`、`E4` 及混合比例。
+** [EN]  PNG  [EN] grayscale [EN] 。**  [EN] ， [EN]  `64`、`E4`  [EN] 。
 
-## 如何看测试盘
+##  [EN] 
 
-从 12 点方向起顺时针共有 12 个 30° 面板，标号中的后半部分是该面板的暗灰候选：
+ [EN]  12  [EN]  12  [EN]  30°  [EN] ， [EN] ：
 
 ```text
 1-66  2-64  3-E4  |  4-64  5-E4  6-66  |  7-E4  8-66  9-64  |  10-66  11-E4  12-64
 ```
 
-每组三个面板使用同样的输入，调色板分别为 `A5 / 候选 / B9 / 92`。候选在不同角度重复出现并调换顺序，以减少盘面位置对比较的影响。以下半径从光盘中心量起：
+ [EN] ， [EN]  `A5 /  [EN]  / B9 / 92`。 [EN] ， [EN] disc surface [EN] 。 [EN] Optical Disc [EN] ：
 
-| 半径 | 测试内容 |
+|  [EN]  |  [EN]  |
 |---|---|
-| 24.5–25.6 mm | 内圈纯色：每 15° 一个色块，`A5、66、64、E4、B9、92` 重复四次 |
-| 26.0–28.1 mm | 四阶蛇形 Floyd–Steinberg 渐变；所有面板共享同一等级图，仅替换暗灰 byte |
-| 28.5–30.5 mm | `64 / E4` 直接混合；每面板顺时针三列分别含 25%、50%、75% 的 `64`，其余为 `E4` |
-| 中心半径 37.5 mm | 相同的 12.8 mm 方形图片裁剪 |
-| 45.8–47.5 mm | 候选与 `A5` 混合 |
-| 47.8–49.5 mm | 候选与 `B9` 混合 |
-| 49.8–51.5 mm | 候选与 `92` 混合 |
-| 52.2–57.3 mm | 外圈纯色，顺序与内圈相同，并附 byte 标签 |
+| 24.5–25.6 mm | Inner Ring [EN] ： [EN]  15°  [EN] ，`A5、66、64、E4、B9、92`  [EN]  |
+| 26.0–28.1 mm |  [EN]  Floyd–Steinberg  [EN] ； [EN] ， [EN]  byte |
+| 28.5–30.5 mm | `64 / E4`  [EN] ； [EN]  25%、50%、75%  [EN]  `64`， [EN]  `E4` |
+|  [EN]  37.5 mm |  [EN]  12.8 mm  [EN]  |
+| 45.8–47.5 mm |  [EN]  `A5`  [EN]  |
+| 47.8–49.5 mm |  [EN]  `B9`  [EN]  |
+| 49.8–51.5 mm |  [EN]  `92`  [EN]  |
+| 52.2–57.3 mm | Outer Ring [EN] ， [EN] Inner Ring [EN] ， [EN]  byte  [EN]  |
 
-后三条混合行的每个面板同样分为顺时针三列：**25%、50%、75% 候选**，剩余部分是该行指定的另一种 byte。各候选使用相同的二元 FS 掩码。
+ [EN] ：**25%、50%、75%  [EN] **， [EN]  byte。 [EN]  FS  [EN] 。
 
-百分比是目标像素占比，`0 / 85 / 170 / 255` 是名义灰度；两者都不表示实盘上等距的亮度。图像格为 **20 µm**，用来测试图片抖动后的混合尺度，并非逐个 Q 字节交替。
+ [EN] pixels [EN] ，`0 / 85 / 170 / 255`  [EN] grayscale； [EN] Brightness。 [EN]  **20 µm**， [EN] Dither [EN] ， [EN]  Q bytes [EN] 。
 
-图片输入已经是四阶抖动 PNG。工具取其左上坐标 `(2880, 1920)`、大小 `640 × 640` 的区域，不缩放、不再次抖动。原始实验输入的四档在该裁剪中约占 `24.13% / 23.90% / 22.74% / 29.24%`，更换输入后占比随图片变化；所有图片面板只有原 `85` 档对应的 byte 不同。
+ [EN] Dither PNG。 [EN]  `(2880, 1920)`、 [EN]  `640 × 640`  [EN] ， [EN] 、 [EN] Dither。 [EN]  `24.13% / 23.90% / 22.74% / 29.24%`， [EN] ； [EN]  `85`  [EN]  byte  [EN] 。
 
-本次图集已独立检查 144 个混合格、4,216,432 个有效像素：排除留白后，实际占比与目标的最大偏差为 **0.501 个百分点**，`64/E4` 直接混合行最大偏差为 **0.197 个百分点**，没有混入其他 Q 字节。完整记录见输出目录的 `mixture-measurements.csv` 与 `mixture-measurements.json`。ISO 还检查了长度，并在 9 个半径位置逐字节核对共 2,359,296 个 payload 目标 Q；这些是数字输出验证，实际盘面效果待刻录观察。
+ [EN]  144  [EN] 、4,216,432  [EN] pixels： [EN] ， [EN] deviation [EN]  **0.501  [EN] **，`64/E4`  [EN] deviation [EN]  **0.197  [EN] **， [EN]  Q bytes。 [EN] directory [EN]  `mixture-measurements.csv`  [EN]  `mixture-measurements.json`。ISO  [EN] ， [EN]  9  [EN] bytes [EN]  2,359,296  [EN]  payload  [EN]  Q； [EN] ， [EN] disc surface [EN] Burn [EN] 。
 
-## 记录结果
+##  [EN] 
 
-先保持同一光源和正常观看位置，比较每组三个相邻面板；再转动光盘，观察相同候选在其他位置的重复面板。最后略微改变观看角度，区分“正常角度稳定可见”和“只有特定角度可见”。
+ [EN] ， [EN] ； [EN] Optical Disc， [EN] 。 [EN] ， [EN] “ [EN] ” [EN] “ [EN] ”。
 
-重点看：候选是否能同时与 `A5`、`B9` 分开；混合比例增加时是否呈现有序变化；图片暗部是否恢复细节；`64 / E4` 的混合是否产生比两种纯色更有用、且角度稳定的层次。对照中 `B9` 应仍能与 `A5`、`92` 明显区分。
+ [EN] ： [EN]  `A5`、`B9`  [EN] ； [EN] ； [EN] ；`64 / E4`  [EN] 、 [EN] 。 [EN]  `B9`  [EN]  `A5`、`92`  [EN] 。
 
-可用 `0 = 难区分，1 = 特定角度可分，2 = 正常角度稳定可分` 简单记录：
+ [EN]  `0 =  [EN] ，1 =  [EN] ，2 =  [EN] `  [EN] ：
 
-| 候选 | 与 A5 区分 | 与 B9 区分 | 混合三档有序、可辨 | 图片暗部细节 | 备注 |
+|  [EN]  |  [EN]  A5  [EN]  |  [EN]  B9  [EN]  |  [EN] 、 [EN]  |  [EN]  |  [EN]  |
 |---|---|---|---|---|---|
 | 66 | | | | | |
 | 64 | | | | | |
 | E4 | | | | | |
 
-另记 `64 / E4` 的 25%、50%、75% 三档能否互相区分，以及是否只在特定角度有效。是否采用第四阶，以这些实盘结果为准。
+ [EN]  `64 / E4`  [EN]  25%、50%、75%  [EN] ， [EN] 。 [EN] ， [EN] 。
 
-## 固定校准参数
+##  [EN] 
 
-本次使用已确认的 43533 校准参数：
+ [EN]  43533  [EN] ：
 
-- 起始半径：`23.991460627731737 mm`
-- 结束半径：`57.964893657925366 mm`
-- 扇区数：`2297888`
-- 通道位长度：`133.3 nm`
-- 轨距多项式系数：`[-3.9256854319227684E-05, 6.964795915429256E-05, -4.670918950137523E-05]`
-- 图集：`6000 × 6000`，覆盖 `120 × 120 mm`
+-  [EN] ：`23.991460627731737 mm`
+-  [EN] ：`57.964893657925366 mm`
+- Sector count：`2297888`
+-  [EN] Bit Length [EN] ：`133.3 nm`
+- Track Pitch [EN] ：`[-3.9256854319227684E-05, 6.964795915429256E-05, -4.670918950137523E-05]`
+-  [EN] ：`6000 × 6000`， [EN]  `120 × 120 mm`
 
-这些参数用于本次盘片的空间映射；导览图不是物理亮度模型。
+ [EN] Disc Media [EN] ； [EN] Brightness [EN] 。

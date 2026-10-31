@@ -151,12 +151,12 @@ internal static class FilePlacementPreviewTests
         RequirePreview(preview, false, "CD without files returns to audio projection");
         state.CdDataDirectory = Path.Combine(directory, "missing-cd-files");
         RunPreview(preview);
-        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith("已实时更新"),
+        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith(" [EN] "),
             "missing CD folder cannot silently show audio projection");
         state.CdDataDirectory = files;
         state.CdSectors = "32";
         RunPreview(preview);
-        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith("已实时更新"),
+        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith(" [EN] "),
             "CD capacity failure does not fall back to full-disc drawing");
         state.CdSectors = "256";
         preview.IsCalibrationPreview = false;
@@ -216,12 +216,12 @@ internal static class FilePlacementPreviewTests
         RequirePreview(preview, false, "pure DVD drawing projection");
         state.DvdDataDirectory = Path.Combine(directory, "missing");
         RunPreview(preview);
-        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith("已实时更新"),
+        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith(" [EN] "),
             "missing DVD folder reports failure instead of falling back to a full-disc drawing");
         state.DvdDataDirectory = files;
         state.DvdTotalSectors = "32";
         RunPreview(preview);
-        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith("已实时更新"),
+        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith(" [EN] "),
             "DVD capacity failure does not fall back to full-disc drawing");
         state.DvdTotalSectors = "256";
         preview.IsCalibrationPreview = false;
@@ -271,12 +271,12 @@ internal static class FilePlacementPreviewTests
         RequirePreview(preview, false, "pure BD drawing projection despite stale sidecar bounds and outer flag");
         state.BdDataDirectory = Path.Combine(directory, "missing");
         RunPreview(preview);
-        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith("已实时更新"),
+        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith(" [EN] "),
             "missing BD folder reports failure instead of falling back to full-disc drawing");
         state.BdDataDirectory = files;
         state.BdTotalSectors = "512";
         RunPreview(preview);
-        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith("已实时更新"),
+        Require(!preview.HasFileRegionOverlay && !preview.StatusText.StartsWith(" [EN] "),
             "BD capacity failure does not fall back to full-disc drawing");
         state.BdTotalSectors = "1024";
         preview.IsCalibrationPreview = false;
@@ -367,7 +367,7 @@ internal static class FilePlacementPreviewTests
 
     private static void RequirePreview(LivePreviewViewModel preview, bool yellow, string context)
     {
-        Require(preview.HasResultImage && preview.StatusText.StartsWith("已实时更新"), context + ": " + preview.StatusText);
+        Require(preview.HasResultImage && preview.StatusText.StartsWith(" [EN] "), context + ": " + preview.StatusText);
         Require(preview.HasFileRegionOverlay == yellow, context + " legend visibility");
         BitmapSource bitmap = preview.ResultImage!;
         byte[] pixels = Pixels(bitmap);

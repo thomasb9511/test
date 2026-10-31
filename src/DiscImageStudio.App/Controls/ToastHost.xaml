@@ -51,7 +51,7 @@
                         <!-- Manual dismiss: the host itself stays hit-test-invisible so empty
                              toast area keeps passing clicks through to the page underneath. -->
                         <Button Grid.Column="2" Style="{StaticResource IconButton}" VerticalAlignment="Top"
-                                AutomationProperties.Name="关闭通知" ToolTip="关闭"
+                                AutomationProperties.Name="Close[EN]" ToolTip="Close"
                                 Click="CloseToast_Click">
                             <iconPacks:PackIconLucide Kind="X" Width="14" Height="14"
                                                       Foreground="{StaticResource TextMutedBrush}" />

@@ -26,7 +26,7 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
-            <Button x:Name="BrowseButton" Grid.Column="1" Content="浏览">
+            <Button x:Name="BrowseButton" Grid.Column="1" Content="Browse">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource BrowseButton}">
                         <Style.Triggers>

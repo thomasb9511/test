@@ -60,8 +60,8 @@ internal static class CalibrationBurnSourceTests
             burn.RefreshDevicesAsync().GetAwaiter().GetResult();
             VerifySource(shell, burner, "BD", OpticalBurnMediaKind.BluRayData);
             Require(burn.SourceDetails.Contains("74.5 nm", StringComparison.Ordinal)
-                && burn.SourceDetails.Contains("反转 3T/6T", StringComparison.Ordinal)
-                && burn.SourceDetails.Contains("绘图 LBA 0–63", StringComparison.Ordinal),
+                && burn.SourceDetails.Contains("Invert 3T/6T", StringComparison.Ordinal)
+                && burn.SourceDetails.Contains(" [EN]  LBA 0–63", StringComparison.Ordinal),
                 "BD summary displays the saved channel length, polarity and drawing range");
             Require(burn.Speeds[1].DisplayName == "2× · 9.2 MB/s", "BD speed uses the BD 1× rate");
 
@@ -85,11 +85,11 @@ internal static class CalibrationBurnSourceTests
             burn.StartBurnCommand.ExecuteAsync(null).GetAwaiter().GetResult();
             Require(burner.Request is { MediaKind: OpticalBurnMediaKind.BluRayData, ContentLength: 64 * 2048 },
                 "the displayed saved BD target is the request passed to the recording service");
-            Require(confirmation?.Contains("BD 标定图案", StringComparison.Ordinal) == true
-                && !confirmation.Contains("CD 标定图案", StringComparison.Ordinal),
+            Require(confirmation?.Contains("BD calibration [EN] ", StringComparison.Ordinal) == true
+                && !confirmation.Contains("CD calibration [EN] ", StringComparison.Ordinal),
                 "confirmation describes BD calibration material");
-            Require(shell.LogText.Contains("开始流式刻录：BD 标定图案", StringComparison.Ordinal)
-                && !shell.LogText.Contains("CD 标定图案", StringComparison.Ordinal),
+            Require(shell.LogText.Contains(" [EN] streamingBurn：BD calibration [EN] ", StringComparison.Ordinal)
+                && !shell.LogText.Contains("CD calibration [EN] ", StringComparison.Ordinal),
                 "burn log describes BD calibration material");
 
             foreach ((string label, OpticalBurnMediaKind mediaKind) in new[]
@@ -105,8 +105,8 @@ internal static class CalibrationBurnSourceTests
                 Require(burner.SpeedQueries.Count > previousQueries, "changing the target refreshes its media-specific speeds");
                 VerifySource(shell, burner, label, mediaKind);
             }
-            Require(burn.SourceDetails.Contains("标准 3T/6T", StringComparison.Ordinal)
-                && burn.SourceDetails.Contains("绘图 LBA 0–95", StringComparison.Ordinal),
+            Require(burn.SourceDetails.Contains("Standard 3T/6T", StringComparison.Ordinal)
+                && burn.SourceDetails.Contains(" [EN]  LBA 0–95", StringComparison.Ordinal),
                 "a new BD target updates its polarity and range");
         }
         finally
@@ -123,17 +123,17 @@ internal static class CalibrationBurnSourceTests
         string label, OpticalBurnMediaKind mediaKind)
     {
         BurnViewModel burn = shell.Burn;
-        Require(burn.FamilyLabel == label && burn.SourceTitle.StartsWith($"标定图案 · {label} · ", StringComparison.Ordinal),
+        Require(burn.FamilyLabel == label && burn.SourceTitle.StartsWith($"calibration [EN]  · {label} · ", StringComparison.Ordinal),
             $"{label} header and source title agree");
         Require(burner.SpeedQueries[^1] == mediaKind, $"{label} speed query agrees with the target");
         Require(burn.IsBluRayBurn == (label == "BD") && burn.IsDvdBurn == (label == "DVD"),
             $"{label} burn flags follow the selected target");
         Require(label == "CD"
                 ? burn.SourceDetails.Contains("mm/s", StringComparison.Ordinal)
-                    && burn.SourceDetails.Contains("延迟交织", StringComparison.Ordinal)
+                    && burn.SourceDetails.Contains("Delayed interleaving", StringComparison.Ordinal)
                 : burn.SourceDetails.Contains(" nm", StringComparison.Ordinal)
                     && !burn.SourceDetails.Contains("mm/s", StringComparison.Ordinal)
-                    && !burn.SourceDetails.Contains("交织", StringComparison.Ordinal),
+                    && !burn.SourceDetails.Contains("interleaving", StringComparison.Ordinal),
             $"{label} summary uses the target's encoding units");
     }
 

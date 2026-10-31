@@ -14,7 +14,7 @@ internal static class FilePlacementProjectTests
             foreach (string family in new[] { ProjectDocument.CdFamily, ProjectDocument.DvdFamily, ProjectDocument.BluRayFamily })
             {
                 ProjectDocument document = new(
-                    ProjectJsonStore.CurrentSchemaVersion, "文件位置", family,
+                    ProjectJsonStore.CurrentSchemaVersion, " [EN] ", family,
                     new ProjectGeometry(24, 58, 2048), [],
                     new ProjectOutputs(Path.Combine(directory, "output.iso"), false,
                         Path.Combine(directory, "files"), "FILES", false, FilesAtOuterRing: true),

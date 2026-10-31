@@ -18,11 +18,11 @@ internal static class DvdFilePlacementTests
         {
             VerifyMetadataParsing(directory);
             string data = Path.Combine(directory, "data");
-            Directory.CreateDirectory(Path.Combine(data, "资料"));
+            Directory.CreateDirectory(Path.Combine(data, " [EN] "));
             byte[] rootBytes = Enumerable.Range(0, 2591).Select(index => (byte)(index * 37)).ToArray();
             byte[] nestedBytes = Enumerable.Range(0, 65547).Select(index => (byte)(index * 17 + 9)).ToArray();
             File.WriteAllBytes(Path.Combine(data, "root.bin"), rootBytes);
-            File.WriteAllBytes(Path.Combine(data, "资料", "中文.bin"), nestedBytes);
+            File.WriteAllBytes(Path.Combine(data, " [EN] ", " [EN] .bin"), nestedBytes);
             File.WriteAllBytes(Path.Combine(data, "empty.txt"), []);
             string image = Path.Combine(directory, "source.png");
             WriteImage(image);
@@ -66,7 +66,7 @@ internal static class DvdFilePlacementTests
                 }
                 Dictionary<string, Entry> entries = ReadJoliet(streamBytes);
                 Require(entries["root.bin"].Bytes.SequenceEqual(rootBytes), "root file bytes");
-                Require(entries["资料/中文.bin"].Bytes.SequenceEqual(nestedBytes), "Unicode nested file bytes");
+                Require(entries[" [EN] / [EN] .bin"].Bytes.SequenceEqual(nestedBytes), "Unicode nested file bytes");
                 Require(entries["empty.txt"].Bytes.Length == 0, "empty file remains readable");
                 foreach (Entry entry in entries.Values.Where(entry => entry.Bytes.Length > 0))
                 {

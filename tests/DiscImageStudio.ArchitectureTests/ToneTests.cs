@@ -333,7 +333,7 @@ internal static class ToneTests
             string path = Path.Combine(directory, "tone.discproj");
             ProjectDocument document = new ProjectDocument(
                 ProjectJsonStore.CurrentSchemaVersion,
-                "影调工程",
+                "Tone [EN] ",
                 ProjectDocument.CdFamily,
                 new ProjectGeometry(24.5, 56.8, 359_849),
                 [],

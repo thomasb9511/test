@@ -125,7 +125,7 @@ internal static class CalibrationCoreTests
         Near(actual.OuterRadiusMm, fit.BestParameters.OuterRadiusMm, 3e-7, $"{kind} single-arm outer radius");
         Near(0, Normalize(fit.RotationRadians - rotation), 5e-5, $"{kind} arbitrary photograph rotation");
         Check(fit.RmsErrorMm < 1e-5, $"{kind} exact continuous residual");
-        Check(fit.Warnings.Any(warning => warning.Contains("整圈", StringComparison.Ordinal)),
+        Check(fit.Warnings.Any(warning => warning.Contains(" [EN] ", StringComparison.Ordinal)),
             "sparse inputs never claim to prove that no unrecorded turn exists");
         CalibrationFitResult wrongRange = CalibrationCrossFitter.Fit(target, [trace], new(RadiusRangeMm: 0.0001));
         Check(!wrongRange.Succeeded || wrongRange.RmsErrorMm > 0.5,

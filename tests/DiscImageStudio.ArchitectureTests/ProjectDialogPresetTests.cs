@@ -31,15 +31,15 @@ internal static class ProjectDialogPresetTests
         state.LoadPresets();
         state.BdInvertMapping = originalPolarity;
         state.AddUserPreset(
-            OpticalDiscFamily.BluRay, "切换目标", 24, 58, 2048,
+            OpticalDiscFamily.BluRay, " [EN] ", 24, 58, 2048,
             invertMapping: !originalPolarity);
-        string targetId = state.BluRayPresets.Single(preset => preset.DisplayName == "切换目标").Id;
+        string targetId = state.BluRayPresets.Single(preset => preset.DisplayName == " [EN] ").Id;
         RecentTemplateStore recent = new(Path.Combine(directory, $"recent-polarity-{originalPolarity}.json"));
         ProjectDialogViewModel dialog = new(
             state, new ProjectDialogRequest(EditMode: true, PreselectFamily: OpticalDiscFamily.BluRay), recent)
         {
             ConfirmPresetSwitch = _ => Task.FromResult(true),
-            ShowPresetSaveDialog = () => new PresetSaveResult("另存的预设"),
+            ShowPresetSaveDialog = () => new PresetSaveResult(" [EN] "),
             SaveDirectory = directory,
         };
 
@@ -49,7 +49,7 @@ internal static class ProjectDialogPresetTests
         dialog.SaveAsPresetCommand.Execute(null);
         Require(string.IsNullOrEmpty(dialog.ErrorMessage), "saving the switched preset succeeds");
         var saved = DiscPresetJsonStore.Load(presetPath).BluRayPresets!
-            .Single(preset => preset.DisplayName == "另存的预设");
+            .Single(preset => preset.DisplayName == " [EN] ");
         Require(saved.InvertMapping == !originalPolarity, "saved preset keeps the switched BD polarity");
         dialog.ConfirmCommand.Execute(null);
         Require(dialog.Result?.BluRayInvertMapping == saved.InvertMapping,

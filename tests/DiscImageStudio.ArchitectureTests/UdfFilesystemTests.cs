@@ -21,25 +21,25 @@ internal static class UdfFilesystemTests
                 Require(rejected, "UDF CS0 forbidden code points are rejected in volume identifiers");
             }
             string source = Path.Combine(directory, "source");
-            Directory.CreateDirectory(Path.Combine(source, "资料", "空目录"));
+            Directory.CreateDirectory(Path.Combine(source, " [EN] ", " [EN] directory"));
             Dictionary<string, byte[]> expected = new(StringComparer.Ordinal)
             {
-                ["资料/说明.txt"] = Encoding.UTF8.GetBytes("蓝光 UDF 内圈文件\r\n"),
+                [" [EN] / [EN] .txt"] = Encoding.UTF8.GetBytes("Blu-ray UDF Inner Ring [EN] \r\n"),
                 ["empty.bin"] = [],
                 ["several-blocks.bin"] = Enumerable.Range(0, 44001).Select(i => (byte)(i * 73)).ToArray()
             };
             // Enough FIDs to cross directory blocks, including non-ASCII CS0 strings.
             for (int index = 0; index < 40; index++)
-                expected.Add($"资料/文件-{index:D2}-a-name-long-enough-to-span-a-directory-block.txt", [(byte)index]);
+                expected.Add($" [EN] / [EN] -{index:D2}-a-name-long-enough-to-span-a-directory-block.txt", [(byte)index]);
             foreach ((string path, byte[] bytes) in expected)
                 File.WriteAllBytes(Path.Combine(source, path.Replace('/', Path.DirectorySeparatorChar)), bytes);
 
-            BluRayIsoPlan plan = BluRayIsoGenerator.Prepare(new(TotalSectors: 1024), source, "蓝光_UDF");
+            BluRayIsoPlan plan = BluRayIsoGenerator.Prepare(new(TotalSectors: 1024), source, "Blu-ray_UDF");
             RecordingMapping mapping = new();
             using ForwardOnlyStream streamed = new();
             BluRayIsoGenerator.GenerateToStream(streamed, plan, mapping);
             byte[] image = streamed.Bytes;
-            Dictionary<string, byte[]> actual = Inspect(image, plan.TotalSectors, "蓝光_UDF", plan.DrawingStartSector,
+            Dictionary<string, byte[]> actual = Inspect(image, plan.TotalSectors, "Blu-ray_UDF", plan.DrawingStartSector,
                 plan.DrawingEndSectorExclusive);
             Require(actual.Count == expected.Count && expected.All(pair => actual.TryGetValue(pair.Key, out byte[]? bytes)
                 && bytes.SequenceEqual(pair.Value)), "independent traversal restores nested Unicode, empty and multi-block files");

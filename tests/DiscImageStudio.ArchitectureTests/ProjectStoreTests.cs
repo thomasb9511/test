@@ -14,12 +14,12 @@ internal static class ProjectStoreTests
         Require(true, "completed");
     }
 
-    private static ProjectDocument CreateDocument(string name = "测试工程")
+    private static ProjectDocument CreateDocument(string name = " [EN] ")
     {
         List<ProjectLayer> layers =
         [
-            new("layer-bottom", "底层图", @"C:\pics\bottom.png", true, -1.5, 2.25, 90, 0.8),
-            new("layer-top", "顶层图", @"C:\pics\top.png", false, 0, 0, 0, 1),
+            new("layer-bottom", " [EN] ", @"C:\pics\bottom.png", true, -1.5, 2.25, 90, 0.8),
+            new("layer-top", " [EN] ", @"C:\pics\top.png", false, 0, 0, 0, 1),
         ];
         return new ProjectDocument(
             ProjectJsonStore.CurrentSchemaVersion,
@@ -27,7 +27,7 @@ internal static class ProjectStoreTests
             ProjectDocument.DvdFamily,
             new ProjectGeometry(24.0, 58.0, 2_295_104, 0.001, -0.0002, 0.00001),
             layers,
-            new ProjectOutputs(@"C:\out\测试工程.iso", WriteCue: false, @"C:\data", "DISC_IMAGE", Interleave: false),
+            new ProjectOutputs(@"C:\out\ [EN] .iso", WriteCue: false, @"C:\data", "DISC_IMAGE", Interleave: false),
             CalibrationSessionPath: @"C:\calib\x.calibration.json",
             ThumbnailPngBase64: Convert.ToBase64String([1, 2, 3, 4]),
             CreatedUtc: new DateTimeOffset(2026, 1, 2, 3, 4, 5, TimeSpan.Zero),
@@ -63,10 +63,10 @@ internal static class ProjectStoreTests
         Require(loaded.ModifiedUtc == original.ModifiedUtc, "modifiedUtc");
 
         // UTF-8 project names survive the file round-trip (Encoding check via a second save).
-        ProjectDocument unicode = CreateDocument("碟片 工程-№2");
+        ProjectDocument unicode = CreateDocument(" [EN]   [EN] -№2");
         string unicodePath = Path.Combine(CreateTempDirectory(), "unicode.discproj");
         ProjectJsonStore.Save(unicodePath, unicode);
-        Require(ProjectJsonStore.Load(unicodePath).Name == "碟片 工程-№2", "unicode name roundtrip");
+        Require(ProjectJsonStore.Load(unicodePath).Name == " [EN]   [EN] -№2", "unicode name roundtrip");
 
         // Non-DVD families and defaults stay consistent.
         ProjectDocument cd = CreateDocument() with
@@ -81,11 +81,11 @@ internal static class ProjectStoreTests
 
     private static void TestBluRayRoundtrip()
     {
-        ProjectDocument bluRay = CreateDocument("蓝光工程") with
+        ProjectDocument bluRay = CreateDocument("Blu-ray [EN] ") with
         {
             DiscFamily = ProjectDocument.BluRayFamily,
             Geometry = new ProjectGeometry(24.0, 58.0, ProjectDocument.BluRaySectorsPerLayer),
-            Outputs = new ProjectOutputs(@"C:\out\蓝光.iso", false, @"C:\data", "BD_IMAGE", false),
+            Outputs = new ProjectOutputs(@"C:\out\Blu-ray.iso", false, @"C:\data", "BD_IMAGE", false),
             BluRay = new ProjectBluRaySettings(InvertMapping: true),
         };
         string path = Path.Combine(CreateTempDirectory(), "bluray.discproj");
@@ -183,9 +183,9 @@ internal static class ProjectStoreTests
     {
         string directory = CreateTempDirectory();
         string path = Path.Combine(directory, "overwrite.discproj");
-        ProjectJsonStore.Save(path, CreateDocument("第一版"));
-        ProjectJsonStore.Save(path, CreateDocument("第二版"));
-        Require(ProjectJsonStore.Load(path).Name == "第二版", "overwrite keeps newest document");
+        ProjectJsonStore.Save(path, CreateDocument(" [EN] "));
+        ProjectJsonStore.Save(path, CreateDocument(" [EN] "));
+        Require(ProjectJsonStore.Load(path).Name == " [EN] ", "overwrite keeps newest document");
         // The atomic-write temp file must be gone; only the project file remains.
         Require(Directory.GetFiles(directory, "*.tmp").Length == 0, "temp files cleaned up");
     }
@@ -207,7 +207,7 @@ internal static class ProjectStoreTests
         File.WriteAllText(legacyPath, legacyJson);
 
         ProjectDocument loaded = ProjectJsonStore.Load(legacyPath);
-        Require(loaded.Name == "测试工程", "legacy file with imageProcessing loads");
+        Require(loaded.Name == " [EN] ", "legacy file with imageProcessing loads");
 
         string migratedPath = Path.Combine(directory, "migrated.discproj");
         ProjectJsonStore.Save(migratedPath, loaded);

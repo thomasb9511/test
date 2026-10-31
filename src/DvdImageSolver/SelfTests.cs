@@ -892,11 +892,11 @@ internal static class SelfTests
             SequenceEqual(replacement, actualReplacement, "template replacement sectors");
 
             string dataDirectory = Path.Combine(directory, "data-source");
-            string nestedDirectory = Path.Combine(dataDirectory, "子目录");
+            string nestedDirectory = Path.Combine(dataDirectory, "[EN]directory");
             Directory.CreateDirectory(nestedDirectory);
             byte[] rootFile = "hybrid root file"u8.ToArray();
             byte[] nestedFile = Enumerable.Range(0, 4097).Select(index => (byte)(index * 29)).ToArray();
-            File.WriteAllBytes(Path.Combine(dataDirectory, "资料.txt"), rootFile);
+            File.WriteAllBytes(Path.Combine(dataDirectory, "[EN].txt"), rootFile);
             File.WriteAllBytes(Path.Combine(nestedDirectory, "hello.bin"), nestedFile);
 
             string hybridPath = Path.Combine(directory, "hybrid.iso");
@@ -921,8 +921,8 @@ internal static class SelfTests
                 uint jolietRootLba = BinaryPrimitives.ReadUInt32LittleEndian(svd.AsSpan(158, 4));
                 uint jolietRootBytes = BinaryPrimitives.ReadUInt32LittleEndian(svd.AsSpan(166, 4));
                 byte[] jolietRoot = ReadIsoExtent(hybridIso, jolietRootLba, jolietRootBytes);
-                rootEntry = FindIsoDirectoryEntry(jolietRoot, "资料.txt;1", joliet: true);
-                nestedEntry = FindIsoDirectoryEntry(jolietRoot, "子目录", joliet: true);
+                rootEntry = FindIsoDirectoryEntry(jolietRoot, "[EN].txt;1", joliet: true);
+                nestedEntry = FindIsoDirectoryEntry(jolietRoot, "[EN]directory", joliet: true);
                 True(!rootEntry.IsDirectory, "hybrid Joliet file record flag");
                 True(nestedEntry.IsDirectory, "hybrid Joliet directory record flag");
 

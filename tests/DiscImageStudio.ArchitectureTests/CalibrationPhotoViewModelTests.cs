@@ -35,8 +35,8 @@ internal static class CalibrationPhotoViewModelTests
         Require(target.SchemaVersion == CalibrationTarget.CurrentSchemaVersion && model.IsPhotoStep && !model.SolveCommand.CanExecute(null), "new target starts in photo step");
         Require(model.CanvasOuterRadiusMm == CalibrationReferencePattern.CanvasRadiusMm && model.PhotoCanvasRadiusMm == 63,
             "disc-preview background remains 120 mm while target scaling and corrected-photo margin are independent");
-        Require(model.CurrentParametersSummary.Contains("内半径", StringComparison.Ordinal)
-            && model.CurrentParametersSummary.Contains("外半径", StringComparison.Ordinal),
+        Require(model.CurrentParametersSummary.Contains("Inner Radius", StringComparison.Ordinal)
+            && model.CurrentParametersSummary.Contains("Outer Radius", StringComparison.Ordinal),
             "the target button names the project parameters a new target is built from");
         var actual = target.Parameters with { InnerRadiusMm = 24.507, OuterRadiusMm = 56.791 };
         var camera = new CalibrationPhotoTransform([6.5, .8, 460, .35, 5.4, 380, .0018, -.0025, 1]);
@@ -185,7 +185,7 @@ internal static class CalibrationPhotoViewModelTests
         Require(model.TracePoints.Count == 10 && model.TracePoints.Select(p => new CalibrationPoint(p.XMm, p.YMm)).SequenceEqual(measured),
             "solving never trims the original ten measured samples");
         AssertObservedEndpoints(model);
-        Require(model.FitAssessment.Contains("候选", StringComparison.Ordinal) && model.FitAssessment.Contains("待核对", StringComparison.Ordinal),
+        Require(model.FitAssessment.Contains(" [EN] ", StringComparison.Ordinal) && model.FitAssessment.Contains(" [EN] ", StringComparison.Ordinal),
             "a low-residual numerical result remains a candidate requiring photographic comparison");
         Invoke(model, "SaveSessionTo", path);
         var saved = CalibrationSessionJson.Load(path);
@@ -206,7 +206,7 @@ internal static class CalibrationPhotoViewModelTests
         Await(model, "ShowCandidateAsync", highResidual);
         model.ContourConfirmed = true;
         Require(model.CrossPredictionContours.Count == 1 && !model.ApplyParametersCommand.CanExecute(null)
-            && model.FitAssessment.Contains("不能应用", StringComparison.Ordinal) && model.TracePoints.Count == 10,
+            && model.FitAssessment.Contains("cannot [EN] ", StringComparison.Ordinal) && model.TracePoints.Count == 10,
             "high-residual candidates remain visible for diagnosis but cannot be presented as an applicable calibration");
 
         model.ClearTracesCommand.Execute(null);
@@ -250,7 +250,7 @@ internal static class CalibrationPhotoViewModelTests
             && Math.Abs(autoCandidate.Parameters.InnerRadiusMm - farActual.InnerRadiusMm) < .001
             && Math.Abs(autoCandidate.Parameters.OuterRadiusMm - farActual.OuterRadiusMm) < .001,
             "auto search widens past the default box and recovers the far-offset radii: " + model.LastStatusMessage);
-        Require(model.FitAssessment.Contains("已自动扩大", StringComparison.Ordinal),
+        Require(model.FitAssessment.Contains(" [EN] ", StringComparison.Ordinal),
             "fit assessment names the widened search box");
 
         Invoke(model, "OnWindowClosed"); Invoke(reopened, "OnWindowClosed");

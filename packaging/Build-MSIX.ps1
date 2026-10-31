@@ -6,7 +6,7 @@ param(
     [string]$Publisher,
 
     [string]$PublisherDisplayName = "Disc Image Studio",
-    [string]$DisplayName = "Disc Image Studio 光盘绘图工坊",
+    [string]$DisplayName = "Disc Image Studio Optical Disc [EN] ",
     [ValidatePattern('^\d+\.\d+\.\d+\.\d+$')]
     [string]$Version,
     [string]$CertificateThumbprint,

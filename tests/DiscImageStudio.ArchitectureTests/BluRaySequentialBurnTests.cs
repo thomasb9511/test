@@ -354,13 +354,13 @@ internal static class BluRaySequentialBurnTests
         {
             MmcCommandException error = new(0x2a, new(unchecked((int)0xc0aa020d), sense, []));
             Require(!error.HasValidSense && !error.IsOperationInProgress
-                && error.Message.Contains("未返回有效", StringComparison.Ordinal)
+                && error.Message.Contains(" [EN] ", StringComparison.Ordinal)
                 && !error.Message.Contains("FFFFFFFF", StringComparison.Ordinal),
                 "missing, zero-filled and truncated Sense is unknown, not a fabricated device error code");
         }
         MmcCommandException disconnected = new(0x1e,
             new(unchecked((int)0x8007048f), new byte[18], []));
-        Require(disconnected.Message.Contains("Windows 报告设备未连接", StringComparison.Ordinal)
+        Require(disconnected.Message.Contains("Windows  [EN] ", StringComparison.Ordinal)
             && disconnected.HResult == unchecked((int)0x8007048f),
             "device-not-connected reports the Windows connection failure while retaining HRESULT");
         MmcCommandException valid = new(0x2a, new(BluRayMmcCommands.CommandHasSenseData,

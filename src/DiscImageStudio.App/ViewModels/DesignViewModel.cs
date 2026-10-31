@@ -78,7 +78,7 @@ public partial class DesignViewModel : ObservableObject
     /// the composed pixels changed even when the file path did not.</summary>
     public long CompositeRevision => _compositeRevision;
 
-    /// <summary>Workspace navigation for the page header's "下一步" action.</summary>
+    /// <summary>Workspace navigation for the page header's "Next Step" action.</summary>
     public IRelayCommand<Workspace> NavigateCommand => _shell.NavigateCommand;
 
     public bool HasSelection => SelectedLayer is not null;
@@ -239,7 +239,7 @@ public partial class DesignViewModel : ObservableObject
         if (failed.Count > 0)
         {
             _shell.ShowToast(
-                "图片无法导入",
+                "[EN]Import",
                 string.Join("\n", failed),
                 ToastKind.Warning);
         }
@@ -368,7 +368,7 @@ public partial class DesignViewModel : ObservableObject
             if (unreadable.Count > 0)
             {
                 _shell.ShowToast(
-                    "部分图层图片无法读取",
+                    "[EN]",
                     string.Join("\n", unreadable),
                     ToastKind.Warning);
             }
@@ -480,8 +480,8 @@ public partial class DesignViewModel : ObservableObject
             }
             catch (Exception exception)
             {
-                _shell.AppendLog($"[{DateTime.Now:HH:mm:ss}] 设计合成失败：{exception.Message}\n");
-                _shell.ShowToast("设计合成失败", exception.Message, ToastKind.Error);
+                _shell.AppendLog($"[{DateTime.Now:HH:mm:ss}] Design[EN]failed：{exception.Message}\n");
+                _shell.ShowToast("Design[EN]failed", exception.Message, ToastKind.Error);
                 return;
             }
         }
@@ -501,7 +501,7 @@ public partial class DesignViewModel : ObservableObject
     {
         if (!HasLayers)
         {
-            throw new ArgumentException("请先在设计页导入图片。");
+            throw new ArgumentException("[EN]Design[EN]Import[EN]。");
         }
 
         if (_exportRenderedRevision == _compositeRevision && _lastExportPath is not null && File.Exists(_lastExportPath))

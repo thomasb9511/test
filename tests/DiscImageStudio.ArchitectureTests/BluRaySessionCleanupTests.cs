@@ -134,7 +134,7 @@ internal static class BluRaySessionCleanupTests
             { "acquire", "disable-mcn", "prevent", "allow", "enable-mcn", "exclusive", "engine", "allow", "enable-mcn", "exclusive" }),
             "implicit disposal tries each pending unlock once before and once after the engine-release attempt");
         Require(fixture.Cleanup.HasPendingLocks && fixture.Warnings.Count == 7
-            && fixture.Warnings.Count(message => message.Contains("清理重试", StringComparison.Ordinal)) == 3,
+            && fixture.Warnings.Count(message => message.Contains(" [EN] ", StringComparison.Ordinal)) == 3,
             "permanent failures retain outstanding state and are reported even if diagnostic callbacks throw");
         int calls = fixture.Operations.Count;
         fixture.Cleanup.Dispose();
@@ -177,7 +177,7 @@ internal static class BluRaySessionCleanupTests
                 () => operations.Add("recorder")));
         Require(operations.SequenceEqual(new[] { "format", "recorder" })
             && ReferenceEquals(observed.InnerException, failure)
-            && observed.Message.Contains("设备未能正常释放", StringComparison.Ordinal),
+            && observed.Message.Contains(" [EN] ", StringComparison.Ordinal),
             "a completed write with failed COM cleanup is explicitly reported and still releases the recorder");
 
         operations.Clear();

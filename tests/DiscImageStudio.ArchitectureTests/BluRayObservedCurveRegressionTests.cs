@@ -29,7 +29,7 @@ internal static class BluRayObservedCurveRegressionTests
                 "all 31 observed points produce a valid physical fit for both UDF and full-zone targets");
             Check(fit.RmsErrorMm is > 0.05 and < 0.15,
                 "the real trace fits near 0.098 mm rather than the erroneous thousand-mm boundary-constrained fit");
-            Check(fit.Warnings.Any(warning => warning.Contains("超出原图案环带", StringComparison.Ordinal)),
+            Check(fit.Warnings.Any(warning => warning.Contains("exceeds [EN] ", StringComparison.Ordinal)),
                 "observations beyond the captured annulus produce a review warning rather than rejection or clipping");
             Near(23.988236631852867, fit.BestParameters!.InnerRadiusMm, 5e-7, "real BD inner-radius fit");
             Near(58.02322629697187, fit.BestParameters.OuterRadiusMm, 5e-7, "real BD outer-radius fit");

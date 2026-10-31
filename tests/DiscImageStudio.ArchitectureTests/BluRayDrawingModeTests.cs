@@ -71,12 +71,12 @@ internal static class BluRayDrawingModeTests
         string emptyDirectory = Path.Combine(directory, "empty-input");
         string dataDirectory = Path.Combine(directory, "input");
         Directory.CreateDirectory(emptyDirectory);
-        Directory.CreateDirectory(Path.Combine(dataDirectory, "资料"));
-        byte[] contents = Encoding.UTF8.GetBytes("蓝光文件与绘图共同保存\n");
-        File.WriteAllBytes(Path.Combine(dataDirectory, "资料", "说明.txt"), contents);
+        Directory.CreateDirectory(Path.Combine(dataDirectory, " [EN] "));
+        byte[] contents = Encoding.UTF8.GetBytes("Blu-ray [EN] Save\n");
+        File.WriteAllBytes(Path.Combine(dataDirectory, " [EN] ", " [EN] .txt"), contents);
         // Pin directory metadata as well as the volume timestamp. NTFS enumeration
         // can briefly return a stale parent entry after creating a child file.
-        Directory.SetLastWriteTimeUtc(Path.Combine(dataDirectory, "资料"), timestamp.UtcDateTime);
+        Directory.SetLastWriteTimeUtc(Path.Combine(dataDirectory, " [EN] "), timestamp.UtcDateTime);
         Directory.SetLastWriteTimeUtc(dataDirectory, timestamp.UtcDateTime);
         Directory.SetLastWriteTimeUtc(emptyDirectory, timestamp.UtcDateTime);
         foreach (string source in new[] { emptyDirectory, dataDirectory })
@@ -98,7 +98,7 @@ internal static class BluRayDrawingModeTests
             if (source == emptyDirectory)
                 Require(files.Count == 0 && plan.FileCount == 0, "an empty selected folder is a valid empty UDF root");
             else
-                Require(files.Count == 1 && files["资料/说明.txt"].AsSpan().SequenceEqual(contents)
+                Require(files.Count == 1 && files[" [EN] / [EN] .txt"].AsSpan().SequenceEqual(contents)
                     && plan.FileCount == 1 && plan.FileBytes == contents.Length,
                     "independent UDF traversal recovers the selected nested file without changing its bytes");
 

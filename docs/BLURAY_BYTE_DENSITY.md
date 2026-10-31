@@ -1,130 +1,130 @@
-# 单层 BD-R：字节与位周期的跳变密度分析
+# Single Layer BD-R：bytes [EN] 
 
-2026-10-24。依据提供的 ISO/IEC 30190:2021，尤其是 13.15–13.18、Figure 40/41，并使用本项目的 EDC、扰码、LDC/BIS、DC、17PP 编码链进行数值试验。仅考虑单层盘。
+2026-10-24。 [EN]  ISO/IEC 30190:2021， [EN]  13.15–13.18、Figure 40/41， [EN]  EDC、scrambling、LDC/BIS、DC、17PP  [EN] 。 [EN] Single Layer [EN] 。
 
-**以总跳变密度为目标时：值得采用按位构造的模式。** 最佳重复字节基线在完整簇中的密度约为 **19.20% / 38.61%**；考虑物理交织和 DC 段边界后，所测位周期方案达到 **15.95% / 43.37%**。两端密度差由 19.41 增至 27.42 个百分点，增加约 41%。这些是数字编码结果，实盘反射亮度和黑白方向尚未确定。当前绘图按用户选择采用下面的 **3T / 6T 数量偏向**，不是这里的密度极端方案。
+** [EN] ： [EN] 。**  [EN] bytes [EN]  **19.20% / 38.61%**； [EN] interleaving [EN]  DC  [EN] ， [EN]  **15.95% / 43.37%**。 [EN]  19.41  [EN]  27.42  [EN] ， [EN]  41%。 [EN] ， [EN] Brightness [EN] OK。 [EN]  **3T / 6T  [EN] **， [EN] 。
 
-## 按 3T / 6T 数量接入绘图
+##  [EN]  3T / 6T  [EN] 
 
-采用相同 958,272 channel bits 的完整簇，统计相邻 modulation ONE 之间完整间隔为 3T 或 6T 的**绝对次数**。mark 与 space 都计入；这不是 NRZI 电平占空比，也不是 `目标 run 数 / 全部 run 数` 的排名。
+ [EN]  958,272 channel bits  [EN] ， [EN]  modulation ONE  [EN]  3T  [EN]  6T  [EN] ** [EN] **。mark  [EN]  space  [EN] ； [EN]  NRZI  [EN] ， [EN]  ` [EN]  run  [EN]  /  [EN]  run  [EN] `  [EN] 。
 
-| 默认图像端 | 扰码域 Q | 基准簇目标 run 数 | 目标 run 占比 | 四地址目标数量范围 |
+|  [EN]  | scrambling [EN]  Q |  [EN]  run  [EN]  |  [EN]  run  [EN]  |  [EN]  |
 |---|---|---:|---:|---:|
-| 暗部（0–127），偏 3T | `AA` | 265,136 | 85.4164% | 264,946–265,186 |
-| 亮部（128–255），偏 6T | `44` | 116,575 | 62.6862% | 116,470–116,659 |
+|  [EN] （0–127）， [EN]  3T | `AA` | 265,136 | 85.4164% | 264,946–265,186 |
+|  [EN] （128–255）， [EN]  6T | `44` | 116,575 | 62.6862% | 116,470–116,659 |
 
-两者在基准 PSN `0x100000` 的全部 256 个重复字节中分别取得最高目标次数。6T 占比最高的 `22` 为 62.7744%，但只有 116,402 个 6T，数量少于 `44`，故数量模式选 `44`。对 `0x100000`、`0x234560`、`0x6D3A00`、`0xCA73E0` 四个地址复核，`44` 的 6T 均值为 116,559.5，略高于 `11` 的 116,526.5 和 `22` 的 116,457；这不表示它在每个地址都最优。
+ [EN]  PSN `0x100000`  [EN]  256  [EN] bytes [EN] 。6T  [EN]  `22`  [EN]  62.7744%， [EN]  116,402  [EN]  6T， [EN]  `44`， [EN]  `44`。 [EN]  `0x100000`、`0x234560`、`0x6D3A00`、`0xCA73E0`  [EN] ，`44`  [EN]  6T  [EN]  116,559.5， [EN]  `11`  [EN]  116,526.5  [EN]  `22`  [EN]  116,457； [EN] 。
 
-生产 `BluRayRunLengthMapping` 以 128 为阈值选择 `AA` / `44`，可反转黑白方向；`BluRayImagePayloadMapping` 按图片位置取样，流式生成器抵消扰码后输出 host payload。图片边缘、EDC、ECC、BIS、DC 与同步会引入其他 run 长度，所以“偏 3T / 6T”不等于纯 3T / 6T。默认暗亮分配是可反转的图像约定，未作为实盘反射亮度标定。
+ [EN]  `BluRayRunLengthMapping`  [EN]  128  [EN]  `AA` / `44`， [EN] ；`BluRayImagePayloadMapping`  [EN] ，streaming [EN] scrambling [EN]  host payload。 [EN] 、EDC、ECC、BIS、DC  [EN]  run  [EN] ， [EN] “ [EN]  3T / 6T” [EN]  3T / 6T。 [EN] ， [EN] Brightnesscalibration。
 
-以上数值采用当前 greedy DC 诊断模型；原始数量见 `all-bytes.json` 的 `Cluster.RunCounts`。架构回归通过完整 RUB 编码验证盘首、盘尾两端的数量偏向，并检查混合图片的扰码及 ECC 位置。命令行与使用方式见[蓝光说明](ADDING_BLURAY.md)。
+ [EN]  greedy DC  [EN] ； [EN]  `all-bytes.json`  [EN]  `Cluster.RunCounts`。 [EN]  RUB  [EN] 、 [EN] ， [EN] scrambling [EN]  ECC  [EN] 。 [EN] [Blu-ray [EN] ](ADDING_BLURAY.md)。
 
-## 测量口径
+##  [EN] 
 
-- 跳变密度 = modulation ONE 数 / channel-bit 数。ONE 表示一次 NRZI 翻转，不能用 NRZI 电平中 ONE 的比例替代。
-- Q 是**扰码后的目标 payload**。host payload 应写入 `Q XOR 扰码掩码`；原始 host 字节直接循环会失去目标模式。
-- 纯 17PP 结果无 DC、ECC、BIS、同步；用独立标准表和有限状态精确循环计算。
-- 完整簇由 65,536 host bytes 生成，统计 `496 × 1932 = 958272` channel bits，包括 EDC、LDC parity、BIS、DC、同步；不含 run-in/out/Guard3，但使用 run-in 结束时的电平和 DSV。
-- 默认 PSN 为 `0x100000`，地址 flags 和 user control data 为零。候选另外在 `0x234560`、`0x6D3A00`、`0xCA73E0` 验证。
-- 主结果使用当前 greedy DC 诊断算法：未来控制位暂置零。它不保证与刻录机决策一致；全 0、全 1、固定种子随机 DC 是额外敏感性试验，不是实际刻录处方。
+-  [EN]  = modulation ONE  [EN]  / channel-bit  [EN] 。ONE  [EN]  NRZI  [EN] ，cannot [EN]  NRZI  [EN]  ONE  [EN] 。
+- Q  [EN] **scrambling [EN]  payload**。host payload  [EN]  `Q XOR scrambling [EN] `； [EN]  host bytes [EN] 。
+-  [EN]  17PP  [EN]  DC、ECC、BIS、 [EN] ； [EN] standard [EN] Status [EN] 。
+-  [EN]  65,536 host bytes  [EN] ， [EN]  `496 × 1932 = 958272` channel bits， [EN]  EDC、LDC parity、BIS、DC、 [EN] ； [EN]  run-in/out/Guard3， [EN]  run-in  [EN]  DSV。
+-  [EN]  PSN  [EN]  `0x100000`， [EN]  flags  [EN]  user control data  [EN] 。 [EN]  `0x234560`、`0x6D3A00`、`0xCA73E0`  [EN] 。
+-  [EN]  greedy DC  [EN] ： [EN] 。 [EN] Recorder [EN] ； [EN]  0、 [EN]  1、 [EN]  DC  [EN] ， [EN] Burn [EN] 。
 
-## 全 256 字节基线
+##  [EN]  256 bytes [EN] 
 
-连续重复一个 Q 字节，在无 DC/ECC 的稳态下只有四档密度：
+ [EN]  Q bytes， [EN]  DC/ECC  [EN] ：
 
-| 纯 17PP 密度 | 字节数 |
+|  [EN]  17PP  [EN]  | bytes [EN]  |
 |---|---:|
 | 1/6 = 16.6667% | 28 |
 | 1/4 = 25% | 92 |
 | 1/3 = 33.3333% | 100 |
 | 5/12 = 41.6667% | 36 |
 
-其中 **80 个字节在奇数位偏移后会换档**。DC 插位会改变两位解析相位，故不能只按这张裸编码表排名。
+ [EN]  **80  [EN] bytes [EN] **。DC  [EN] ， [EN] cannot [EN] 。
 
-| Q | 纯 17PP | 完整簇 greedy | 四个 PSN 的完整簇范围 | 测试用途 |
+| Q |  [EN]  17PP |  [EN]  greedy |  [EN]  PSN  [EN]  |  [EN]  |
 |---|---:|---:|---:|---|
-| `09` | 16.6667% | 19.1997% | 19.1962–19.2080% | 扫描中最低的重复字节 |
-| `11` | 16.6667% | 19.4820% | 19.4447–19.4820% | 纯编码为全部 6T，可作长 run 对照 |
-| `22` | 16.6667% | 19.3505% | 19.3242–19.3510% | 同属稳健低密度组 |
-| `3D` | 41.6667% | 38.4602% | 38.4428–38.4739% | 稳健高密度字节 |
-| `7A` | 41.6667% | 38.5486% | 38.5409–38.5525% | 稳健高密度字节 |
-| `9E` | 41.6667% | 38.6143% | 38.6014–38.6260% | 扫描中最高的重复字节 |
-| `00` | 33.3333% | 32.8615% | 32.8412–32.8668% | 常见输入对照 |
-| `FF` | 33.3333% | 32.5332% | 32.5332–32.5639% | 与 `00` 不构成大密度差 |
+| `09` | 16.6667% | 19.1997% | 19.1962–19.2080% |  [EN] bytes |
+| `11` | 16.6667% | 19.4820% | 19.4447–19.4820% |  [EN]  6T， [EN]  run  [EN]  |
+| `22` | 16.6667% | 19.3505% | 19.3242–19.3510% |  [EN]  |
+| `3D` | 41.6667% | 38.4602% | 38.4428–38.4739% |  [EN] bytes |
+| `7A` | 41.6667% | 38.5486% | 38.5409–38.5525% |  [EN] bytes |
+| `9E` | 41.6667% | 38.6143% | 38.6014–38.6260% |  [EN] bytes |
+| `00` | 33.3333% | 32.8615% | 32.8412–32.8668% |  [EN]  |
+| `FF` | 33.3333% | 32.5332% | 32.5332–32.5639% |  [EN]  `00`  [EN]  |
 
-`55/AA` 完整簇约为 32.30% / 32.39%，也不适合做密度两端。若不抵消扰码，所测 14 个常量 host 候选均落在约 29.37–29.67%，原本的差异基本消失。
+`55/AA`  [EN]  32.30% / 32.39%， [EN] 。 [EN] scrambling， [EN]  14  [EN]  host  [EN]  29.37–29.67%， [EN] 。
 
-全部结果：[CSV](../artifacts/bluray-byte-density/all-bytes.csv)、[可读表格](../artifacts/bluray-byte-density/all-bytes.md)、[256 字节密度图](../artifacts/bluray-byte-density/all-bytes-density.png)。
+ [EN] ：[CSV](../artifacts/bluray-byte-density/all-bytes.csv)、[ [EN] ](../artifacts/bluray-byte-density/all-bytes.md)、[256 bytes [EN] ](../artifacts/bluray-byte-density/all-bytes-density.png)。
 
-## 更细粒度的可达模式
+##  [EN] 
 
-17PP 按 2/4/6/8 个输入位的可变长规则编码，并有前一 modulation bit 和特殊替换规则。字节是载体，不能作为独立码字处理。
+17PP  [EN]  2/4/6/8  [EN] ， [EN]  modulation bit  [EN] 。bytes [EN] ，cannot [EN] 。
 
-| 原始周期位串 | 周期长度 | 字节打包示意 | 纯 17PP 密度 | 稳态 run |
+|  [EN]  |  [EN]  | bytes [EN]  |  [EN]  17PP  [EN]  |  [EN]  run |
 |---|---:|---|---:|---|
-| `0001` | 4 | `11` | 16.6667% | 全部 6T |
-| `00111101` | 8 | `3D` | 41.6667% | 3 个 2T、2 个 3T |
-| `001111` | 6 | `3C F3 CF` | 44.4444% | 3 个 2T、1 个 3T |
-| `0000101101110010` | 16 | `0B 72` | **12.5%** | 全部 8T |
-| `0111011110` | 10 | `77 9D E7 79 DE` | **46.6667%** | 6 个 2T、1 个 3T |
+| `0001` | 4 | `11` | 16.6667% |  [EN]  6T |
+| `00111101` | 8 | `3D` | 41.6667% | 3  [EN]  2T、2  [EN]  3T |
+| `001111` | 6 | `3C F3 CF` | 44.4444% | 3  [EN]  2T、1  [EN]  3T |
+| `0000101101110010` | 16 | `0B 72` | **12.5%** |  [EN]  8T |
+| `0111011110` | 10 | `77 9D E7 79 DE` | **46.6667%** | 6  [EN]  2T、1  [EN]  3T |
 
-普通 17PP 数据段 run 为 2T–8T，且最多连续六个 2T。因此长数据段密度下界是 `1/8`，上界是 `7/(6×2+3)=7/15`；上述 16 位和 10 位模式分别达到它们。同步含 9T，不能把该界限直接套在包含同步的任意短窗口上。
+ [EN]  17PP  [EN]  run  [EN]  2T–8T， [EN]  2T。 [EN]  `1/8`， [EN]  `7/(6×2+3)=7/15`； [EN]  16  [EN]  10  [EN] 。 [EN]  9T，cannot [EN] 。
 
-两个极端周期在奇数位相位会退化为 29.1667% / 33.3333%。6 位 `001111` 两种相位均为 44.4444%，但裸 NRZI 占空为 4/9 或其互补，需要 DC 控制平衡。周期不超过 16 位的搜索中，它是奇偶相位均稳健的最高密度模式。
+ [EN]  29.1667% / 33.3333%。6  [EN]  `001111`  [EN]  44.4444%， [EN]  NRZI  [EN]  4/9  [EN] ， [EN]  DC  [EN] 。 [EN]  16  [EN] ， [EN] 。
 
-打包示意只说明如何表示周期。**不能直接循环这些 host 字节，也不能只在原 payload 顺序循环 Q 后忽略交织。** 例如 6 位周期按 payload 顺序填 Q，完整簇仅约 33.43–34.39%；按物理 ECC 顺序排列才达到约 40.64–40.75%。
+ [EN] 。**cannot [EN]  host bytes， [EN] cannot [EN]  payload  [EN]  Q  [EN] interleaving。**  [EN]  6  [EN]  payload  [EN]  Q， [EN]  33.43–34.39%； [EN]  ECC  [EN]  40.64–40.75%。
 
-## DC 补偿与完整簇结果
+## DC  [EN] 
 
-每帧 155 ECC bytes 共 1240 raw bits；先有 25 个数据位，随后每 45 个数据位插一个 DC bit，共 28 个。令 `j=8×EccColumn+bitWithinByte`，其中 bit 0 为 MSB：
+ [EN]  155 ECC bytes  [EN]  1240 raw bits； [EN]  25  [EN] ， [EN]  45  [EN]  DC bit， [EN]  28  [EN] 。 [EN]  `j=8×EccColumn+bitWithinByte`， [EN]  bit 0  [EN]  MSB：
 
 ```text
 DCbefore(j) = j < 25 ? 0 : 1 + floor((j - 25) / 45)
 
-预留 DC 槽：
+ [EN]  DC  [EN] ：
 index = RecordingFrame × 1268 + j + DCbefore(j)
 Qbit = pattern[(index + phase) % period]
 
-按 DC 数据段重启：
+ [EN]  DC  [EN] ：
 index = j < 25 ? j : (j - 25) % 45
 Qbit = pattern[(index + phase) % period]
 ```
 
-DC 插入后，每段的起点都处在偶数输入位，重启周期能保住两位解析相位。预留槽方案只预留位置，DC 位值仍由编码器/刻录机选择。EDC、BIS、parity 也不能任意控制，保持其正常生成。
+DC  [EN] ， [EN] ， [EN] 。 [EN] ，DC  [EN] /Recorder [EN] 。EDC、BIS、parity  [EN] cannot [EN] ， [EN] 。
 
-按这些物理位置构造 Q 后，反向散布到对应 payload byte，再抵消扰码。项目现有 `Map(luminance, position)` 已提供 RecordingFrame/EccColumn；一次调用里逐位生成 8 位即可，不需要把返回值限制为固定字节。
+ [EN]  Q  [EN] ， [EN]  payload byte， [EN] scrambling。 [EN]  `Map(luminance, position)`  [EN]  RecordingFrame/EccColumn； [EN]  8  [EN] ， [EN] bytes。
 
-| 推荐位模式 | 构造 | phase | 完整簇 greedy | 四 PSN 范围 | 另三种 DC 策略范围 |
+| recommended [EN]  |  [EN]  | phase |  [EN]  greedy |  [EN]  PSN  [EN]  |  [EN]  DC  [EN]  |
 |---|---|---:|---:|---:|---:|
-| 16 位 `0000101101110010` | DC 段重启 | 2 | **15.9500%** | 15.9405–15.9500% | 15.9278–17.0720% |
-| 6 位 `001111` | 预留 DC 槽 | 3 | **40.8172%** | 40.8158–40.8315% | 41.0010–41.4603% |
-| 10 位 `0111011110` | DC 段重启 | 4 | **43.3670%** | 43.3662–43.3713% | 42.1870–43.3904% |
+| 16  [EN]  `0000101101110010` | DC  [EN]  | 2 | **15.9500%** | 15.9405–15.9500% | 15.9278–17.0720% |
+| 6  [EN]  `001111` |  [EN]  DC  [EN]  | 3 | **40.8172%** | 40.8158–40.8315% | 41.0010–41.4603% |
+| 10  [EN]  `0111011110` | DC  [EN]  | 4 | **43.3670%** | 43.3662–43.3713% | 42.1870–43.3904% |
 
-phase 从 0 开始，表示在上式坐标上加的周期偏移。每簇重新从坐标原点开始；这些 phase 仅针对该构造方式，不是整体物理信号任意移动相同位数。
+phase  [EN]  0  [EN] ， [EN] 。 [EN] ； [EN]  phase  [EN] ， [EN] 。
 
-6 位方案全部相位的完整簇密度为 40.7929–40.8172%，相位变化影响较小。极端 16/10 位方案仍需保持选定相位；错相位可能回到约 30%–32%。DC 敏感性区间只是这几种已测策略的范围，不是任意刻录机的保证区间。
+6  [EN]  40.7929–40.8172%， [EN] 。 [EN]  16/10  [EN] ； [EN]  30%–32%。DC  [EN] ， [EN] Recorder [EN] 。
 
-推荐低模式中，完整 inter-transition run 的 **52.65% 为 8T**；推荐高模式中 **79.14% 为 2T**。这提供了比单看平均密度更具体的实盘对照。两者在 greedy 模型中 NRZI 电平占比均约 50%，所以不能把 bit 值 0/1 直接解释为视觉黑白。
+recommended [EN] ， [EN]  inter-transition run  [EN]  **52.65%  [EN]  8T**；recommended [EN]  **79.14%  [EN]  2T**。 [EN] 。 [EN]  greedy  [EN]  NRZI  [EN]  50%， [EN] cannot [EN]  bit  [EN]  0/1  [EN] 。
 
-![完整簇密度对比](../artifacts/bluray-byte-density/fine-pattern-comparison.png)
+![ [EN] ](../artifacts/bluray-byte-density/fine-pattern-comparison.png)
 
-## 首轮实盘候选
+##  [EN] 
 
-建议在相同盘片、刻录速度和观察条件下比较以下纯色块，并在内、中、外半径重复排列：
+ [EN] Disc Media、Burn [EN] ， [EN] 、 [EN] 、Outer Radius [EN] ：
 
-1. 稀疏端：16 位周期、DC 段重启、phase 2。
-2. 高密度端：10 位周期、DC 段重启、phase 4。
-3. 稳健高密度对照：6 位周期、预留 DC 槽、phase 3。
-4. 字节基线：`09`、`11`、`9E`；`00` 可另作普通输入对照。
+1.  [EN] ：16  [EN] 、DC  [EN] 、phase 2。
+2.  [EN] ：10  [EN] 、DC  [EN] 、phase 4。
+3.  [EN] ：6  [EN] 、 [EN]  DC  [EN] 、phase 3。
+4. bytes [EN] ：`09`、`11`、`9E`；`00`  [EN] 。
 
-先用大块比较实际明暗及转动视角后的稳定性，再做区域混合和图像映射。直接逐字节交替两种模式会改变编码上下文，不应假定其密度或亮度是两端线性平均。这些密度极端候选尚未执行实盘刻录，也没有用于当前默认黑白映射。
+ [EN] ， [EN] 。 [EN] bytes [EN] ， [EN] Brightness [EN] 。 [EN] Burn， [EN] 。
 
-## 验证及复现
+##  [EN] 
 
-- 独立 Python 实现按标准 Figure 41 转录；与 C# 的 256 个四字节向量、298 个周期向量逐位一致。
-- 穷举长度 2–16 的全部 131,068 个原始位串，各检查两种 preceding bit，共 262,136 次精确循环计算；验证 14,694 个两位旋转等价类。上述相位稳健最优只限该搜索范围。
-- 完整链扫描全部 256 字节；合成帧另检查每字节 8 种 DC mask × 31 种同步位置 × 2 种前帧 termination。
-- 细模式共 176 个模式/布局/相位组合，另做 120 个地址复核簇。每个簇均验证 65,536 个可控 Q 字节在真实 ECC 位置与目标相同。
-- 簇长度、run 计数守恒和 RLL 间隔检查通过；快速簇扫描与完整 RUB 路径交叉一致。纯数据无 2T–8T 之外完整 run；包含同步的簇允许 9T。
+- 独立 Python 实现按standard Figure 41 转录；与 C#  [EN]  256  [EN] bytes [EN] 、298  [EN] 。
+-  [EN]  2–16  [EN]  131,068  [EN] ， [EN]  preceding bit， [EN]  262,136  [EN] ； [EN]  14,694  [EN] 。 [EN] Search Range。
+-  [EN]  256 bytes； [EN] bytes 8  [EN]  DC mask × 31  [EN]  × 2  [EN]  termination。
+-  [EN]  176  [EN] / [EN] / [EN] ， [EN]  120  [EN] 。 [EN]  65,536  [EN]  Q bytes [EN]  ECC  [EN] 。
+-  [EN] 、run  [EN]  RLL  [EN] ； [EN]  RUB path [EN] 。 [EN]  2T–8T  [EN]  run； [EN]  9T。
 
-工具与命令见 [BluRayByteProbe](../tools/BluRayByteProbe/README.md)。原始结果在 `artifacts/bluray-byte-density/`，其中 artifacts 目录按仓库规则忽略；脚本可以重建结果。生产已采用本页单列的 3T / 6T 数量映射。
+ [EN]  [BluRayByteProbe](../tools/BluRayByteProbe/README.md)。 [EN]  `artifacts/bluray-byte-density/`， [EN]  artifacts directory [EN] ； [EN] 。 [EN]  3T / 6T  [EN] 。

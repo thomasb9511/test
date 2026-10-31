@@ -210,7 +210,7 @@ internal static class CalibrationEncoderTests
             previousVersion["target"]!["schemaVersion"] = 5;
             bool previousVersionRejected = false;
             try { CalibrationSessionJson.Deserialize(previousVersion.ToJsonString()); }
-            catch (ArgumentException error) when (error.Message.Contains("不支持", StringComparison.Ordinal))
+            catch (ArgumentException error) when (error.Message.Contains(" [EN] ", StringComparison.Ordinal))
             {
                 previousVersionRejected = true;
             }

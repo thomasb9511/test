@@ -87,7 +87,7 @@ internal static class CalibrationCrossExtensionTests
         CalibrationPoint[] originalPoints = points.ToArray();
         var fit = CalibrationCrossFitter.Fit(target, [new(0, points)], new(SearchCenter: actual, RadiusRangeMm: 0.005));
         Check(!fit.Succeeded && fit.Candidates.Count == 0 && points.SequenceEqual(originalPoints)
-            && fit.Warnings.Any(w => w.Contains("正半径", StringComparison.Ordinal)),
+            && fit.Warnings.Any(w => w.Contains(" [EN] ", StringComparison.Ordinal)),
             "all-candidate domain failure is clear and retains every observation");
     }
 

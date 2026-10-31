@@ -78,7 +78,7 @@ internal static class CalibrationCubicPitchTests
         var outline = CalibrationCrossPrediction.GetOutline(target, recovered, 24.01, 57.99, fit.RotationRadians);
         foreach (double radius in Enumerable.Range(0, 301).Select(i => 24.01 + 33.98 * i / 300.0))
             Check(DistanceToPolyline(mapping(radius), outline) < .011, "cubic outline chord tolerance and complete phase");
-        Check(fit.Warnings.Any(w => w.Contains("不表示参数唯一", StringComparison.Ordinal)),
+        Check(fit.Warnings.Any(w => w.Contains(" [EN] ", StringComparison.Ordinal)),
             "a single observed curve does not claim unique parameter identification");
     }
 
@@ -96,7 +96,7 @@ internal static class CalibrationCubicPitchTests
             Check(fit.BestParameters!.PitchLinear == p.PitchLinear
                 && fit.BestParameters.PitchQuadratic == p.PitchQuadratic && fit.BestParameters.PitchCubic == p.PitchCubic,
                 "exact supplied profile does not invent shape changes");
-            if (count < 12) Check(fit.Warnings.Any(w => w.Contains("至少 12", StringComparison.Ordinal)), "sparse cubic support warning");
+            if (count < 12) Check(fit.Warnings.Any(w => w.Contains(" [EN]  12", StringComparison.Ordinal)), "sparse cubic support warning");
         }
         var narrow = Enumerable.Range(0, 20).Select(i => mapping(31 + 9.5 * i / 19.0)).ToArray();
         var narrowFit = CalibrationCrossFitter.Fit(target, [new(0, narrow)]);

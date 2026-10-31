@@ -102,7 +102,7 @@ internal static class OpticalWriteProgressTests
         seconds = 1;
         reporter.ReportAcceptedBytes(32L * 2048, length);
         EqualRate(65_536, updates[^1], "BD acknowledged-command rate counts exactly the accepted payload");
-        Require(updates[^1].Message.Contains("刻录机已接收", StringComparison.Ordinal),
+        Require(updates[^1].Message.Contains("Recorder [EN] ", StringComparison.Ordinal),
             "BD progress describes device acceptance without promising cache flush");
         reporter.ReportStage("finalize", "Flushing recorder cache");
         Require(updates[^1].CompletedBytes == 65_536 && updates[^1].BytesPerSecond is null,

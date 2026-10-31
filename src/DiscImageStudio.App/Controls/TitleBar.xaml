@@ -13,7 +13,7 @@
         <StackPanel x:Name="WindowButtons" Orientation="Horizontal" HorizontalAlignment="Right"
                     WindowChrome.IsHitTestVisibleInChrome="True">
             <Button x:Name="MinimizeButton" Width="46" Height="32" Focusable="False" Click="Minimize_Click"
-                    ToolTip="最小化">
+                    ToolTip="[EN]">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Hot" Background="Transparent">
@@ -32,7 +32,7 @@
                 </Button.Template>
             </Button>
             <Button x:Name="MaximizeButton" Width="46" Height="32" Focusable="False" Click="Maximize_Click"
-                    ToolTip="最大化">
+                    ToolTip="[EN]">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Hot" Background="Transparent">
@@ -54,7 +54,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button x:Name="CloseButton" Width="46" Height="32" Focusable="False" Click="Close_Click" ToolTip="关闭">
+            <Button x:Name="CloseButton" Width="46" Height="32" Focusable="False" Click="Close_Click" ToolTip="Close">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Hot" Background="Transparent">

@@ -15,7 +15,7 @@ public sealed record CalibrationCrossTrace(int ArmIndex, IReadOnlyList<Calibrati
 public static partial class CalibrationCrossFitter
 {
     private const string NearHalfTurnWarning =
-        "有相邻曲线点的转角接近半圈，绕圈判断可能不可靠；请补点后复核。";
+        "[EN]，[EN]；[EN]。";
 
     private sealed record Datum(int Trace, double Radius, double Angle, double AngularScale, double Weight);
     private sealed record Solution(double Inner, double Outer, double Rotation, double Cost, double Rms, double[] Residuals);
@@ -26,20 +26,20 @@ public static partial class CalibrationCrossFitter
     {
         ArgumentNullException.ThrowIfNull(target);
         ArgumentNullException.ThrowIfNull(traces);
-        if (traces.Count > 4) throw new ArgumentException("十字线最多包含四条臂。");
+        if (traces.Count > 4) throw new ArgumentException("[EN]。");
         var arms = new HashSet<int>();
         int count = 0;
         foreach (CalibrationCrossTrace trace in traces)
         {
             if (trace is null || trace.ArmIndex is < 0 or > 3 || !arms.Add(trace.ArmIndex) || trace.Points is null)
-                throw new ArgumentException("曲线编号无效或重复。");
+                throw new ArgumentException("Invalid or duplicate curve index.");
             count += trace.Points.Count;
-            if (count > 20_000) throw new ArgumentException("曲线点数量超出限制。");
+            if (count > 20_000) throw new ArgumentException("Curve point count exceeds limit.");
             foreach (CalibrationPoint point in trace.Points)
                 if (point is null || !double.IsFinite(point.X) || !double.IsFinite(point.Y)
                     || Math.Abs(point.X) > 1000 || Math.Abs(point.Y) > 1000
                     || point.X * point.X + point.Y * point.Y < 0.01)
-                    throw new ArgumentException("曲线点坐标无效，请使用矫正后以盘心为原点的坐标。");
+                    throw new ArgumentException("Invalid curve point coordinates; please use rectified coordinates centered at disc hub.");
         }
     }
 
@@ -56,9 +56,9 @@ public static partial class CalibrationCrossFitter
         var inputWarnings = new List<string>();
         Datum[] data = Prepare(traces, band, inputWarnings, out string? inputFailure);
         if (inputFailure is not null) return Failed(inputFailure);
-        if (data.Length < 6) return Failed("请沿同一条曲线从内到外至少标出 6 个点，覆盖靠内、中间和靠外的位置。");
+        if (data.Length < 6) return Failed("Please mark at least 6 points along the same curve from inner to outer radius, covering inner, middle, and outer regions.");
         double coverage = (data.Max(point => point.Radius) - data.Min(point => point.Radius)) / band;
-        if (coverage < 0.18) return Failed("曲线覆盖范围太窄，无法稳定分离内外半径；请继续标出更靠内、外的曲线。");
+        if (coverage < 0.18) return Failed("Curve coverage is too narrow to reliably separate inner and outer radii; please mark additional points further inward and outward.");
 
         // The first pass uses the caller's tolerance. If the trace is much cleaner than
         // that tolerance, a second pass tightens it to the observed scale. This stops a
@@ -192,7 +192,7 @@ public static partial class CalibrationCrossFitter
         }
         solutions.Sort((first, second) => first.Cost.CompareTo(second.Cost));
         if (solutions.Count == 0)
-            return new(Failed("搜索范围内没有能覆盖全部观测点的有效正半径曲线延拓，请检查照片尺度、盘心或参数范围。"), []);
+            return new(Failed("No valid positive-radius curve extension covers all observed points in the search range. Please check photograph scale, disc center, or parameter range."), []);
         Solution best = solutions[0];
         bool boundaryLimited = OnBoundary(best, lowerInner, upperInner, lowerOuter, upperOuter, options.RadiusRangeMm);
         if (target.Parameters.Kind == CalibrationDiscKind.BluRay)
@@ -203,20 +203,20 @@ public static partial class CalibrationCrossFitter
             if (data.Any(point => bestModel.TryAtRadius(point.Radius, out var predicted)
                 && (predicted.SourceRadius < target.DrawingInnerRadiusMm - 1e-8
                     || predicted.SourceRadius > target.DrawingOuterRadiusMm + 1e-8)))
-                warnings.Add("部分描点在候选模型下超出原图案环带，已按连续曲线保留；请复核照片尺度、盘心及端点是否沿同一条可见曲线。");
+                warnings.Add("Some traced points fall outside the original annular ring under candidate model; retained as a continuous curve. Please verify photograph scale, center, and endpoints.");
         }
-        if (coverage < 0.6) warnings.Add("曲线覆盖的内外范围偏窄，参数可能互相补偿；请补充更靠内、外的点。");
-        if (best.Rms > delta * 2) warnings.Add("曲线偏差较大，请检查照片矫正、点位和是否始终沿同一条线标点。");
+        if (coverage < 0.6) warnings.Add("Radial coverage of the curve is narrow; parameters may compensate each other. Please add points further inward and outward.");
+        if (best.Rms > delta * 2) warnings.Add("Large curve deviation; please verify photograph rectification, point positions, and ensure points follow the same radial line.");
         if (boundaryLimited)
-            warnings.Add("最佳结果靠近搜索边界，建议扩大搜索范围并补充曲线点复核。");
+            warnings.Add("Optimal result is near the search boundary; consider expanding the search range and adding more points.");
         if (ParameterCorrelation(best, data, Evaluate) > 0.998)
-            warnings.Add("当前曲线对两个半径的约束较相似，暂不能仅凭低残差判断参数唯一；请扩大径向覆盖并检查点位精度。");
+            warnings.Add("Current curve provides similar constraints on both radii; low residual alone does not guarantee uniqueness. Please expand radial coverage.");
         if (solutions.Skip(1).Any(solution => solution.Cost <= best.Cost + Math.Max(0.005, best.Cost * 0.25)
             && (Math.Abs(solution.Inner - best.Inner) > 0.0002 || Math.Abs(solution.Outer - best.Outer) > 0.0002)))
-            warnings.Add("存在形状接近的参数候选，请对照整条曲线后再应用。");
+            warnings.Add("Multiple parameter candidates have similar shapes; compare against the full curve before applying.");
         if (options.RadiusRangeMm > 0.05)
-            warnings.Add("宽范围只进行了有限多起点搜索，候选列表不代表穷尽所有可能参数。");
-        warnings.Add("角度展开以相邻点之间没有遗漏整圈为前提；请对照完整曲线，在弯曲或绕行处补点后确认。");
+            warnings.Add("Wide search used a limited multi-start strategy; candidate list is not exhaustive.");
+        warnings.Add("Angular unwrapping assumes no full revolutions were skipped between adjacent points. Verify against full curve and add points at steep curvatures.");
         CalibrationFitCandidate[] candidates = solutions.Take(options.MaxCandidates).Select(solution =>
         {
             (double maxError, int outliers) = ResidualStats(solution.Residuals, delta);
@@ -358,7 +358,7 @@ public static partial class CalibrationCrossFitter
                 {
                     if (radii[i] < radii[i - 1] - Math.Max(0.1, band * 0.005))
                     {
-                        failure = "曲线出现明显向内回退，请按内到外的顺序沿同一条线标点。";
+                        failure = "Curve exhibits significant inward backtrack; please mark points strictly in inner-to-outer order along the same line.";
                         return [];
                     }
                     double change = Normalize(angle - Math.Atan2(points[i - 1].Y, points[i - 1].X));
@@ -368,7 +368,7 @@ public static partial class CalibrationCrossFitter
                     // ambiguous, and that is where unwrapping must stop.
                     if (Math.Abs(change) > Math.PI * 0.995)
                     {
-                        failure = "相邻曲线点转角接近半圈，无法判断是否漏掉整圈；请在这两点之间沿实际曲线补点。";
+                        failure = "Adjacent points differ in angle by nearly half a revolution; cannot determine if a full turn was skipped. Please add intermediate points.";
                         return [];
                     }
                     if (Math.Abs(change) > Math.PI * 0.9 && !warnings.Contains(NearHalfTurnWarning))
@@ -377,7 +377,7 @@ public static partial class CalibrationCrossFitter
                 }
             }
             if (radii[^1] - radii[0] < band * 0.02) continue;
-            if (points.Length > 1024) warnings.Add("曲线点较多，拟合使用均匀抽取的点；完整顺序仍用于角度展开。");
+            if (points.Length > 1024) warnings.Add("Many curve points present; fitting uses evenly subsampled points while full sequence is preserved for angular unwrapping.");
             int count = Math.Min(points.Length, 1024);
             for (int slot = 0; slot < count; slot++)
             {

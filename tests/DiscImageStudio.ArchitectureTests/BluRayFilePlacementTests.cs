@@ -35,17 +35,17 @@ internal static class BluRayFilePlacementTests
     private static void TestLayouts(string directory)
     {
         string source = Path.Combine(directory, "files");
-        Directory.CreateDirectory(Path.Combine(source, "资料"));
+        Directory.CreateDirectory(Path.Combine(source, " [EN] "));
         byte[] content = Enumerable.Range(0, 70_003).Select(i => (byte)(i * 37)).ToArray();
-        byte[] unicode = Encoding.UTF8.GetBytes("蓝光外圈文件\n原样读取");
+        byte[] unicode = Encoding.UTF8.GetBytes("Blu-rayOuter Ring [EN] \n [EN] ");
         File.WriteAllBytes(Path.Combine(source, "payload.bin"), content);
-        File.WriteAllBytes(Path.Combine(source, "资料", "说明.txt"), unicode);
+        File.WriteAllBytes(Path.Combine(source, " [EN] ", " [EN] .txt"), unicode);
         File.WriteAllBytes(Path.Combine(source, "empty"), []);
         // Fresh NTFS directory timestamps may be refreshed by their first traversal.
         // Pin every source timestamp so this compares placement defaults only.
         foreach (string file in Directory.EnumerateFiles(source, "*", SearchOption.AllDirectories))
             File.SetLastWriteTimeUtc(file, Timestamp.UtcDateTime);
-        Directory.SetLastWriteTimeUtc(Path.Combine(source, "资料"), Timestamp.UtcDateTime);
+        Directory.SetLastWriteTimeUtc(Path.Combine(source, " [EN] "), Timestamp.UtcDateTime);
         Directory.SetLastWriteTimeUtc(source, Timestamp.UtcDateTime);
 
         BluRayDiscParameters disc = new(TotalSectors: 1024);
@@ -69,7 +69,7 @@ internal static class BluRayFilePlacementTests
             "picture mapping only receives the complete middle drawing interval");
         Dictionary<string, byte[]> files = UdfFilesystemTests.Inspect(image, disc.TotalSectors, "PLACEMENT",
             drawingEndSector: outer.DrawingEndSectorExclusive);
-        Require(files["payload.bin"].SequenceEqual(content) && files["资料/说明.txt"].SequenceEqual(unicode)
+        Require(files["payload.bin"].SequenceEqual(content) && files[" [EN] / [EN] .txt"].SequenceEqual(unicode)
             && files["empty"].Length == 0, "independent UDF parser recovers Unicode directories and exact file bytes");
         ReadOnlySpan<byte> partition = FindDescriptor(image, 5);
         uint partitionStart = U32(partition, 188), partitionLength = U32(partition, 192);

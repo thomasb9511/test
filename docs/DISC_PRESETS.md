@@ -1,36 +1,36 @@
-# 可编辑盘片预设
+#  [EN] Disc Media [EN] 
 
-盘片预设分为两层：
+Disc Media [EN] ：
 
-- 内置层随应用发布和更新，保存官方预设。
-- 用户层位于以下文件，只保存用户新增、覆盖和禁用设置：
+-  [EN] ，Save [EN] 。
+-  [EN] ， [EN] Save [EN] 、 [EN] ：
 
 ```text
 %LOCALAPPDATA%\DiscImageStudio\disc-presets.json
 ```
 
-程序第一次启动时会在用户层放入“自定义 CD 参数”“自定义 DVD 参数”和“自定义蓝光参数”三个可编辑预设。内置预设不会复制到用户文件，因此应用更新后的参数修正和新增预设会自动生效。
+ [EN] “Custom CD Profile”“Custom DVD Profile” [EN] “Custom Blu-ray Profile” [EN] 。 [EN] Copy [EN] ， [EN] 。
 
-新增用户预设的入口在工程设置对话框：「将此套参数保存为预设」先在独立窗口确认名称，再把当前参数追加进用户层；新建工程的模板列表会列出目录中的全部非手动预设，按「最近」「CD」「DVD」「蓝光」分类显示。
+ [EN] Project Settings [EN] ：「 [EN] Save [EN] 」 [EN] ， [EN] ；New Project [EN] directory [EN] ， [EN] 「Recent」「CD」「DVD」「Blu-ray」 [EN] 。
 
-工程设置对话框同时列出当前盘型的预设：选择其他预设会覆盖对话框里的几何参数，因此切换前先弹出确认，取消则保留原参数且不改变选中项。新建工程与工程设置中的“自定”预设都可右键删除，删除会立即写回用户层并刷新列表；直接编辑 JSON（新增、改名、禁用）后仍需重启程序生效。
+Project Settings [EN] ： [EN] ， [EN] ，Cancel [EN] 。New Project [EN] Project Settings [EN] “Custom” [EN] Delete，Delete [EN] Refresh [EN] ； [EN]  JSON（ [EN] 、 [EN] 、 [EN] ） [EN] 。
 
-## 合并规则
+##  [EN] 
 
-- 用户预设使用新 `id` 时，会追加到内置预设之后。
-- 用户预设使用与内置预设相同的 `id` 时，会完整覆盖该内置预设。
-- `disabledCdPresetIds`、`disabledDvdPresetIds` 和 `disabledBluRayPresetIds` 可以隐藏不需要的内置或用户预设。
-- 内置预设更新时，未被同 ID 用户项覆盖的参数会自动更新。
+-  [EN]  `id`  [EN] ， [EN] 。
+-  [EN]  `id`  [EN] ， [EN] 。
+- `disabledCdPresetIds`、`disabledDvdPresetIds`  [EN]  `disabledBluRayPresetIds`  [EN] 。
+-  [EN] ， [EN]  ID  [EN] 。
 
-## 添加 DVD 预设
+## Add DVD  [EN] 
 
-在 `dvdPresets` 数组中复制初始化的用户对象，修改 `id`、名称和参数。例如：
+ [EN]  `dvdPresets`  [EN] Copy [EN] ， [EN]  `id`、 [EN] 。 [EN] ：
 
 ```json
 {
   "id": "verbatim-dvd-r-azo-43533",
-  "displayName": "Verbatim DVD-R AZO (43533)（实测）",
-  "description": "Verbatim DVD-R AZO 43533 已验证标定参数：23.9914606277–57.9648936579 mm，共 2,297,888 个扇区；采用三次轨距分布。",
+  "displayName": "Verbatim DVD-R AZO (43533) [Calibrated]",
+  "description": "Verbatim DVD-R AZO 43533  [EN] calibration [EN] ：23.9914606277–57.9648936579 mm， [EN]  2,297,888  sectors； [EN] Track Pitch [EN] 。",
   "totalSectors": 2297888,
   "innerRadiusMm": 23.991460627731737,
   "outerRadiusMm": 57.964893657925366,
@@ -41,21 +41,21 @@
 }
 ```
 
-DVD 的 `totalSectors` 必须大于 0 且是 16 的倍数，以满足 ECC Block 和流式刻录布局要求。`channelBitLengthNm` 见下节，属于保留字段。
+DVD  [EN]  `totalSectors` must be greater than 0  [EN]  16  [EN] ， [EN]  ECC Block  [EN] streamingBurn [EN] 。`channelBitLengthNm`  [EN] ， [EN] 。
 
-此 Verbatim DVD 预设来自用户确认已验证的 `calibration-f2f851f7.calibration.json`，保留记录中的完整参数精度。
+ [EN]  Verbatim DVD  [EN]  `calibration-f2f851f7.calibration.json`， [EN] 。
 
-`pitchLinear`、`pitchQuadratic`、`pitchCubic` 是三次轨距的三个相对形状系数，缺省为 0，兼容旧预设。模型为 `p(x)=p0*(1+pitchLinear*x+pitchQuadratic*x²+pitchCubic*x³)`，`x=(r-innerRadiusMm)/(outerRadiusMm-innerRadiusMm)`。完整多项式有四项；`p0` 根据总轨长自动计算，界面显示四项的实际 μm 数值。整个 `0≤x≤1` 区间内轨距必须严格为正，不能仅检查内外边界。修改任一系数会切换到未保存的自定义状态，重新选择内置等轨距预设会恢复零系数。
+`pitchLinear`、`pitchQuadratic`、`pitchCubic`  [EN] Track Pitch [EN] ， [EN]  0， [EN] 。 [EN]  `p(x)=p0*(1+pitchLinear*x+pitchQuadratic*x²+pitchCubic*x³)`，`x=(r-innerRadiusMm)/(outerRadiusMm-innerRadiusMm)`。 [EN] ；`p0`  [EN] ， [EN]  μm  [EN] 。 [EN]  `0≤x≤1`  [EN] Track Pitchmust [EN] ，cannot [EN] 。 [EN] Unsaved [EN] Custom [EN] Status， [EN] Track Pitch [EN] 。
 
-## 添加 CD 预设
+## Add CD  [EN] 
 
-在 `cdPresets` 数组中复制一个现有对象，修改 `id`、名称、扇区数和内外半径。例如：
+ [EN]  `cdPresets`  [EN] Copy [EN] ， [EN]  `id`、 [EN] 、Sector count [EN] Outer Radius。 [EN] ：
 
 ```json
 {
   "id": "cd-74",
-  "displayName": "标准 74min CD",
-  "description": "ECMA-130／ISO/IEC 10149 标准速度 1200 mm/s；120 mm 盘、约 74 分钟，333,000 扇区（24.5–56.8 mm）。",
+  "displayName": "Standard 74-min CD",
+  "description": "ECMA-130／ISO/IEC 10149 standard [EN]  1200 mm/s；120 mm  [EN] 、 [EN]  74 minutes，333,000 sectors（24.5–56.8 mm）。",
   "sectors": 333000,
   "innerRadiusMm": 24.5,
   "outerRadiusMm": 56.8,
@@ -63,15 +63,15 @@ DVD 的 `totalSectors` 必须大于 0 且是 16 的倍数，以满足 ECC Block 
 }
 ```
 
-## 添加蓝光预设
+## AddBlu-ray [EN] 
 
-在 `bluRayPresets` 数组中复制一个现有对象，修改 `id`、名称和参数。例如：
+ [EN]  `bluRayPresets`  [EN] Copy [EN] ， [EN]  `id`、 [EN] 。 [EN] ：
 
 ```json
 {
   "id": "bd-r-ritek-10x",
-  "displayName": "铼德 BD-R 10x（实测）",
-  "description": "实测参数：内半径 23.988221 mm、外半径 58.023235 mm、12,219,392 扇区。",
+  "displayName": "Ritek BD-R 10x [Calibrated]",
+  "description": "measured [EN] ：Inner Radius 23.988221 mm、Outer Radius 58.023235 mm、12,219,392 sectors。",
   "totalSectors": 12219392,
   "innerRadiusMm": 23.98822105616562,
   "outerRadiusMm": 58.023234731100764,
@@ -79,25 +79,25 @@ DVD 的 `totalSectors` 必须大于 0 且是 16 的倍数，以满足 ECC Block 
 }
 ```
 
-BD 的 `totalSectors` 必须大于 0、按 32 对齐且不超过单层容量 12,219,392；外半径不超过 60 mm。`invertMapping` 是预置的 3T/6T 极性，应用到工程后仍可在设计页影调模块中修改。
+BD  [EN]  `totalSectors` must be greater than 0、 [EN]  32  [EN] Single Layer [EN]  12,219,392；Outer Radius [EN]  60 mm。`invertMapping`  [EN]  3T/6T polarity， [EN] Design [EN] Tone [EN] 。
 
-内置 `bd-r-verbatim-64099`（Verbatim BD-R (64099)）采用用户文件 `disc-presets.json` 中已保存的「Verbatim 64099」预设，保留完整精度：内半径 `23.987042157339335` mm、外半径 `57.987960341783236` mm、`12,219,392` 扇区、`invertMapping: false`。GUI 与命令行使用相同参数。
+ [EN]  `bd-r-verbatim-64099`（Verbatim BD-R (64099)） [EN]  `disc-presets.json`  [EN] Saved [EN] 「Verbatim 64099」 [EN] ， [EN] ：Inner Radius `23.987042157339335` mm、Outer Radius `57.987960341783236` mm、`12,219,392` sectors、`invertMapping: false`。GUI  [EN] 。
 
-## 固定参数与保留字段
+##  [EN] 
 
-扫描速度、起始角、图片外半径与 DVD channel bit 长度是方案固定的物理量，界面不提供对应表单，程序生成时一律采用 1200 mm/s（ECMA-130）、0°、57.5 mm 与 133.3 nm。
+ [EN] 、 [EN] 、 [EN] Outer Radius [EN]  DVD channel bit  [EN] ， [EN] ， [EN]  1200 mm/s（ECMA-130）、0°、57.5 mm  [EN]  133.3 nm。
 
-它们在 JSON 中仍作为字段保留，原因是在旧版的配置文件中这几个参数是必要的，因此需要保证旧版本写出的用户文件可以直接使用。这两个值不参与生成计算。
+ [EN]  JSON  [EN] ， [EN] ， [EN] 。 [EN] 。
 
-## i18n 兼容字段
+## i18n  [EN] 
 
-格式已经预留可选的 `fallbackLanguage`、`displayNameResourceKey` 和 `descriptionResourceKey`。当前版本仍直接显示 `displayName` 与 `description`；以后接入多语言资源时会优先解析资源键，并以现有文本作为回退，因此不需要再次升级 JSON 结构。用户预设无需填写资源键。
+ [EN]  `fallbackLanguage`、`displayNameResourceKey`  [EN]  `descriptionResourceKey`。 [EN]  `displayName`  [EN]  `description`； [EN] ， [EN] ， [EN]  JSON  [EN] 。 [EN] 。
 
-## 编辑规则
+##  [EN] 
 
-- 当前顶层为 `"schemaVersion": 4`，包含 `cdPresets`、`dvdPresets`、`bluRayPresets`、三个禁用列表与可选 `fallbackLanguage`。程序也接受 `"schemaVersion": 2` 与 `3`；缺少 BD 目录时由内置 BD 模板补齐，保存时升级为 4。
-- 每组预设中的 `id` 必须唯一；`__manual__` 是界面“未保存的自定义参数”状态的保留 ID，不能写进 JSON。
-- 只能填写模板中列出的生成参数；其他字段会被拒绝，避免把图片布局或校准参数混入盘片预设。
-- 半径、`linearVelocityMmPerSecond` 和 `channelBitLengthNm` 必须是大于 0 的有限数值，生成外半径必须大于生成内半径。
-- 文件允许 `//` 或 `/* ... */` 注释以及数组末尾的逗号。
-- 如果格式或参数无效，程序会指出问题并继续保留上一次成功加载的预设，不会自动覆盖用户文件。
+-  [EN]  `"schemaVersion": 4`， [EN]  `cdPresets`、`dvdPresets`、`bluRayPresets`、 [EN]  `fallbackLanguage`。 [EN]  `"schemaVersion": 2`  [EN]  `3`； [EN]  BD directory [EN]  BD  [EN] ，Save [EN]  4。
+-  [EN]  `id` must [EN] ；`__manual__`  [EN] “Unsaved [EN] Custom [EN] ”Status [EN]  ID，cannot [EN]  JSON。
+-  [EN] ； [EN] ， [EN] Disc Media [EN] 。
+-  [EN] 、`linearVelocityMmPerSecond`  [EN]  `channelBitLengthNm` must be a finite positive number， [EN] Outer Radiusmust [EN] Inner Radius。
+- 文件允许 `//`  [EN]  `/* ... */`  [EN] 。
+-  [EN] invalid， [EN] succeeded [EN] ， [EN] 。

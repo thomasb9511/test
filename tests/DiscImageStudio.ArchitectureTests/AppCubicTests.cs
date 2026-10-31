@@ -10,7 +10,7 @@ internal static class AppCubicTests
 {
     internal static void Run()
     {
-        DvdDiscPreset preset = new("test-cubic", "三次轨距", "测试", 2_295_104, 24, 58,
+        DvdDiscPreset preset = new("test-cubic", " [EN] Track Pitch", " [EN] ", 2_295_104, 24, 58,
             PitchLinear: 0.12, PitchQuadratic: -0.08, PitchCubic: 0.04);
         DiscParametersState state = new();
         state.ApplyDvdDiscPreset(preset);
@@ -30,7 +30,7 @@ internal static class AppCubicTests
         state.DvdTotalSectors = "1147552";
         Require(state.DvdActualPitchSummary != actual, "sector length recomputes the actual polynomial scale");
         state.DvdPitchLinear = "-3";
-        Require(state.DvdPitchSummary.Contains("无效"), "nonpositive interior pitch is reported without a binding exception");
+        Require(state.DvdPitchSummary.Contains("invalid"), "nonpositive interior pitch is reported without a binding exception");
 
         string directory = Path.Combine(Path.GetTempPath(), $"disc-cubic-app-{Guid.NewGuid():N}");
         Directory.CreateDirectory(directory);

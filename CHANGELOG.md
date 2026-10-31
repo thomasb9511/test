@@ -4,127 +4,127 @@
 
 ## [1.3.3] - 2026-10-28
 
-- 新增 Verbatim BD-R (64099) 内置预设，采用用户保存的实测半径、扇区数与映射极性，GUI 和命令行均可使用。
-- 修复蓝光标定流式刻录的来源摘要误显示为 CD，并按标定记录显示蓝光位长、3T/6T 极性和绘图范围。
-- 流式刻录底部固定显示设备已写入量／总量、实时速率和对应倍速；准备、传输、封盘及诊断信息记录到日志。传输量不再覆盖实际写入进度，封盘或长时间没有新写入数据时清除旧速率。
-- BD 标定范围映射接入普通图片生成器的有界并行批处理，并复用四点几何采样；保留原始标定回调、绘图范围、极性和顺序输出。自定义映射仍须明确允许并行。
-- CD 标定复用图片生成的四点几何采样，DVD 标定与码字回调复用已有变轨距 SIMD 路径；保留逐点标量三角函数、回调顺序及音轨交织，DVD 恒定轨距仍使用既有标量回退。
-- CD 文件模式补齐四点采样，按各字节经过交换与 CIRC 映射后的独立物理位置计算，保留文件区、调色索引、扰码及盘尾边界处理。
+-  [EN]  Verbatim BD-R (64099)  [EN] ， [EN] Save [EN] measured [EN] 、Sector count [EN] polarity，GUI  [EN] 。
+-  [EN] Blu-raycalibrationstreamingBurn [EN]  CD， [EN] calibration [EN] Blu-rayBit Length、3T/6T polarity [EN] 。
+- streamingBurn [EN] ／ [EN] 、 [EN] ； [EN] 、 [EN] 、finalize disc / close session [EN] 。 [EN] ，finalize disc / close session [EN] 。
+- BD calibration [EN] ， [EN] ； [EN] calibration [EN] 、 [EN] 、polarity [EN] 。Custom [EN] 。
+- CD calibration [EN] ，DVD calibration [EN] Track Pitch SIMD path； [EN] 、 [EN] audio trackinterleaving，DVD  [EN] Track Pitch [EN] 。
+- CD  [EN] ， [EN] bytes [EN]  CIRC  [EN] ， [EN] 、 [EN] 、scrambling [EN] 。
 
 ## [1.3.2] - 2026-10-27
 
-- 工程设置对话框可直接换用当前盘型的其他预设；切换前先确认覆盖，取消后保留原有参数且不改变选中项。
-- 主题蓝统一为深色 `#3385FF`、浅色强调 `#74C0FF`；滑钮选择器的选中项改用主题色填充，高度与输入框对齐，选择框右侧的展开箭头缩为紧凑尺寸。
-- 新建工程和工程设置中可右键“自定”预设删除，删除会同步清理最近模板记录。
-- 设计页画布缩放栏常驻右下角，新增“−”“+”按钮并把可缩放范围扩到 25%–1200%（此前只能放大）；“适应窗口”改用刷新图标。缩放仍可用 Ctrl/Alt+滚轮，中键拖动平移。
-- 主页模板卡片的灰色说明显示盘型（“CD”“DVD”“蓝光”）。
-- 修复预设切换确认框误响应普通按键、蓝光切换后另存预设沿用旧极性，以及删除最近预设后盘型与下一选中项不一致的问题。
+- Project Settings [EN] ； [EN] ，Cancel [EN] 。
+- 主题蓝统一为深色 `#3385FF`、 [EN]  `#74C0FF`； [EN] ， [EN] ， [EN] 。
+- New Project [EN] Project Settings [EN] “Custom” [EN] Delete，Delete [EN] Recent [EN] 。
+- Design [EN] ， [EN] “−”“+” [EN]  25%–1200%（ [EN] ）；“ [EN] ” [EN] Refresh [EN] 。 [EN]  Ctrl/Alt+ [EN] ， [EN] 。
+- Home [EN] （“CD”“DVD”“Blu-ray”）。
+-  [EN] 、Blu-ray [EN] polarity， [EN] DeleteRecent [EN] 。
 
 ## [1.3.1] - 2026-10-26
 
-- CD 新增随盘文件模式：未选择文件夹时保留 WAV 音轨，选择文件夹后生成 ISO9660/Joliet Mode 1 数据盘；文件支持内圈或外圈放置，工程保存、ISO 导出与流式刻录共用布局。
-- CD 设计投影和带布局信息的成品读回以黄色显示文件区，保留完整盘面坐标；支持中文目录与文件，随盘内容保持原始字节。
-- CD 数据盘流式刻录改为与音轨共用 DAO 会话和容量边界处理，修复铼德医疗水蓝盘预设误报“剩余容量不足”的问题；保留 ATIP 标定的 359,845 扇区及既有末端限制。
-- 新增 Mode 1 校验码、DAO 数据轨标识、前向流和内外圈 ISO 完整还原回归。CD 数据盘 DAO 已通过软件及原生内存镜像验证，尚未完成实盘刻录验证；即时刻录仍为实验性功能。
+- CD  [EN] Accompanying Files [EN] ： [EN] Select Folder [EN]  WAV audio track，Select Folder [EN]  ISO9660/Joliet Mode 1  [EN] ； [EN] Inner Ring [EN] Outer Ring [EN] ， [EN] Save、ISO Export [EN] streamingBurn [EN] 。
+- CD Design [EN] ， [EN] disc surface [EN] ； [EN] directory [EN] ， [EN] bytes。
+- CD Data DiscstreamingBurn [EN] audio track [EN]  DAO  [EN] ， [EN] “ [EN] ” [EN] ； [EN]  ATIP calibration [EN]  359,845 sectors [EN] 。
+-  [EN]  Mode 1  [EN] 、DAO  [EN] 、 [EN] Outer Ring ISO  [EN] 。CD Data Disc DAO  [EN] ， [EN] completed [EN] Burn [EN] ；On-The-Fly Burning [EN] 。
 
 ## [1.3.0] - 2026-10-26
 
-- 全部应用、光盘模块与工具升级到 .NET 10，CI、EXE 和 MSIX 打包使用 .NET 10 SDK；发布的自包含 EXE 继续无需另装运行时。
-- DVD／蓝光设计页新增“随盘文件”区域，可直接选择文件夹和内圈／外圈位置，与导出页共享设置。
-- DVD 和蓝光的文件与图案混合模式新增“文件位置：内圈／外圈”，默认内圈；工程保存、ISO 导出与流式刻录使用同一布局。外圈文件模式保留必要的文件系统信息，绘图范围自动避开文件区。
-- DVD／蓝光的设计投影和带布局信息的成品读回，以黄色显示文件区（含文件系统），并显示图例；颜色仅用于预览。没有配套布局信息的外部镜像不推测文件占用范围。
+-  [EN] 、Optical Disc [EN]  .NET 10，CI、EXE  [EN]  MSIX  [EN]  .NET 10 SDK； [EN]  EXE  [EN] 。
+- DVD／Blu-rayDesign [EN] “Accompanying Files” [EN] ， [EN] Select Folder [EN] Inner Ring／Outer Ring [EN] ， [EN] Export [EN] 。
+- DVD  [EN] Blu-ray [EN] “ [EN] ：Inner Ring／Outer Ring”， [EN] Inner Ring； [EN] Save、ISO Export [EN] streamingBurn [EN] 。Outer Ring [EN] ， [EN] 。
+- DVD／Blu-ray [EN] Design [EN] ， [EN] （ [EN] ）， [EN] ； [EN] 。 [EN] 。
 
 ## [1.2.0] - 2026-10-26
 
-### 工程与设计
+###  [EN] Design
 
-- 重构为设计、预览、导出、刻录和辅助标定五个工作区，CD、DVD、BD 共用当前工程与盘片参数。
-- 新增 `.discproj` 工程保存与打开、最近工程缩略图、未保存检查和工程设置；支持将当前盘片参数保存为用户预设。
-- 新增多图层设计画布，可导入多张图片、移动、缩放、旋转、调整层次与显隐；导出和刻录统一使用高分辨率合成图。原自动环形复制入口移除，布局由设计画布管理。
-- 新增任务坞，集中显示运行日志、任务进度、取消入口及输出位置；导出与刻录页面统一展示当前工程来源。
+-  [EN] Design、 [EN] 、Export、Burn [EN] Assisted Calibration [EN] ，CD、DVD、BD  [EN] Disc Media [EN] 。
+-  [EN]  `.discproj`  [EN] Save [EN] Open、Recent [EN] 、Unsaved [EN] Project Settings； [EN] Disc Media [EN] Save [EN] 。
+-  [EN] Design [EN] ， [EN] Import [EN] 、 [EN] 、 [EN] 、 [EN] 、 [EN] ；Export [EN] Burn [EN] 。 [EN] Copy [EN] ， [EN] Design [EN] 。
+-  [EN] ， [EN] 、 [EN] 、Cancel [EN] Output location；Export [EN] Burn [EN] 。
 
-### 影调、蓝光与标定
+### Tone、Blu-ray [EN] calibration
 
-- 影调集中到设计页，支持 0–100% 抖动强度、亮度调整、sRGB 线性化及 CD 二阶／四阶灰度。新工程默认 75% 抖动；缺少影调设置的旧工程保留原二值映射。
-- 为 CD、DVD 和 BD 生产命令增加可选影调参数；CD/DVD 采用确定性的逻辑字节抖动，BD 在源图分辨率处理，生成、流式刻录与设计投影采用一致设置。
-- BD ISO 新增配套 JSON 元数据，记录盘片几何、绘图范围、映射极性、影调与 UDF 时间戳；预览打开 ISO 时可自动恢复对应参数。
-- 改进辅助标定拟合：自动扩展搜索范围，蓝光在残差仍较大时继续扩宽；增加最大偏差、异常点标记与误差门槛，避免应用偏差过大的结果。
+- Tone [EN] Design [EN] ， [EN]  0–100% Dither [EN] 、Brightness [EN] 、sRGB  [EN]  CD  [EN] ／ [EN] grayscale。 [EN]  75% Dither； [EN] Tone [EN] 。
+-  [EN]  CD、DVD  [EN]  BD  [EN] Tone [EN] ；CD/DVD  [EN] OK [EN] bytesDither，BD  [EN] ， [EN] 、streamingBurn [EN] Design [EN] 。
+- BD ISO  [EN]  JSON  [EN] ， [EN] Disc Media [EN] 、 [EN] 、 [EN] polarity、Tone [EN]  UDF  [EN] ； [EN] Open ISO  [EN] 。
+-  [EN] Assisted Calibrationfitting： [EN] Search Range，Blu-ray [EN] residual [EN] ； [EN] deviation、 [EN] ， [EN] deviation [EN] 。
 
-### 兼容性与迁移
+###  [EN] 
 
-- 工程与用户预设统一支持 CD/DVD/BD；保留旧工程 schema 1、旧预设 schema 2/3 及已有 CD 音轨的读取兼容。生产命令保留已有参数，新增影调参数均为可选。
-- 开发截图命令 `ui-snapshot` 的页面编号现为：0 主页、1 设计、2 预览、3 导出、4 刻录、5 标定；关于窗口改用 `--about-dialog`，`--live-processing` 已移除。
-- 蓝光与直接刻录仍为实验性功能；硬件实测范围见 `docs/VALIDATION.md`，不将自动化测试等同于新增实盘验证。
+-  [EN]  CD/DVD/BD； [EN]  schema 1、 [EN]  schema 2/3  [EN]  CD audio track [EN] 。 [EN] ， [EN] Tone [EN] 。
+-  [EN]  `ui-snapshot`  [EN] ：0 Home、1 Design、2  [EN] 、3 Export、4 Burn、5 calibration；About [EN]  `--about-dialog`，`--live-processing`  [EN] 。
+- Blu-ray [EN] Burn [EN] ； [EN] measured [EN]  `docs/VALIDATION.md`， [EN] 。
 
 ## [1.1.0] - 2026-10-25
 
-### 新增
+###  [EN] 
 
-- 单层 25 GB BD-R 实验模式：源图布局、3T/6T 映射与反转、盘片参数和预设、实时预览、ISO 生成及辅助标定，GUI 与命令行均可使用。暂不支持双层盘，实盘明暗仍需验证。
-- 蓝光内圈文件支持 UDF 2.01 和大于 4 GiB 的单文件；生成与流式刻录共享完整盘面几何、分段文件布局和有界数据流。
-- 全新未格式化 BD-R 的无备用区顺序刻录，保留完整 12,219,392 扇区。开刻前校验容量、空白状态和起始地址；不自动缩容、不在失败后自动重写，增加分块超时和清理诊断。
-- CD、DVD、BD 制作与实时预览可开启黑白抖动和独立 sRGB 伽马校正，默认关闭。文件生成、流式刻录及源图预览采用一致的处理选项。
-- 辅助标定支持照片透视矫正、曲线描点拟合、参数快照与回填；DVD 使用三次轨距模型，内置已验证的 Verbatim DVD-R AZO (43533) 预设，并附校准前后实拍和记录。
-- 新增独立黑白抖动工具、DVD 灰阶实验工具与蓝光字节分析工具，附使用说明和可复现验证步骤。
+- Single Layer 25 GB BD-R  [EN] ： [EN] 、3T/6T  [EN] 、Disc Media [EN] 、Live Preview、ISO  [EN] Assisted Calibration，GUI  [EN] 。 [EN] Dual Layer [EN] ， [EN] 。
+- Blu-rayInner Ring [EN]  UDF 2.01  [EN]  4 GiB  [EN] ； [EN] streamingBurn [EN] disc surface [EN] 、 [EN] 。
+-  [EN]  BD-R  [EN] spare area [EN] Burn， [EN]  12,219,392 sectors。 [EN] 、 [EN] Status [EN] ； [EN] 、 [EN] failed [EN] ， [EN] 。
+- CD、DVD、BD  [EN] Live Preview [EN] Dither [EN]  sRGB Gamma [EN] ， [EN] Close。 [EN] 、streamingBurn [EN] 。
+- Assisted Calibration [EN] rectification、 [EN] fitting、 [EN] ；DVD  [EN] Track Pitch [EN] ， [EN]  Verbatim DVD-R AZO (43533)  [EN] ， [EN] 。
+-  [EN] Dither [EN] 、DVD Grayscale [EN] Blu-raybytes [EN] ， [EN] 。
 
-### 改进与修复
+###  [EN] 
 
-- 实时预览支持 CD/DVD/BD 源图投影和已有产物读回，可指定分辨率，使用适应窗口、1:1 像素、鼠标缩放及拖动；修复预设同步、浏览命令及 DVD 读回采样位置。
-- CD/DVD 使用统一的黑白二阶映射；黑白输入保留离散像素，环形复制缩放后重新抖动。旧多阶产物的读回继续识别原有灰阶。
-- CD 与 DVD 采样加入 SIMD 与边界回退，蓝光采用有界并行生成及整数 SIMD；回归测试验证标量、并行与流式输出一致性。
-- 刻录页显示按设备确认写入数据计算的速率，串行化设备查询与刻录操作；准备及封盘阶段不显示过时速率。实际刻录仍为实验性功能。
-- 修复多显示器、不同 DPI 与任务栏位置下的最大化边界，统一参数的小数精度；主页和最近任务支持蓝光，CD WAV 输出可选择是否生成 CUE。
-- 标定记录使用 schema 6，不接受旧版图案记录；盘片预设及已有音轨/镜像的兼容范围见对应文档。所有实际几何与亮度结论仍需结合具体设备和介质验证。
+- Live Preview [EN]  CD/DVD/BD  [EN] ， [EN] ， [EN] 、1:1 pixels、 [EN] ； [EN] 、Browse [EN]  DVD  [EN] 。
+- CD/DVD  [EN] ； [EN] pixels， [EN] Copy [EN] Dither。 [EN] Grayscale。
+- CD  [EN]  DVD  [EN]  SIMD  [EN] ，Blu-ray [EN]  SIMD； [EN] 、 [EN] streaming [EN] 。
+- Burn [EN] ， [EN] Burn [EN] ； [EN] finalize disc / close session [EN] 。 [EN] Burn [EN] 。
+-  [EN] 、 [EN]  DPI  [EN] ， [EN] ；Home [EN] Recent [EN] Blu-ray，CD WAV  [EN]  CUE。
+- calibration [EN]  schema 6， [EN] ；Disc Media [EN] audio track/ [EN] 。 [EN] Brightness [EN] 。
 
-### 开源与文档
+###  [EN] 
 
-- 采用 GPL-3.0-or-later，与 CDImage 衍生的 CD 交织实现保持兼容；补齐原作者版权与致谢。
-- 保留第三方组件和 HarmonyOS Sans 字体各自的完整许可；“关于”页可离线查看，单文件 EXE 同样包含授权文本。
-- README 补充 ECMA-267、ECMA-359、ISO/IEC 30190:2021 等标准及官方链接；整理工具入口、验证文档、缓存忽略规则与个人路径示例。
+-  [EN]  GPL-3.0-or-later， [EN]  CDImage  [EN]  CD interleaving [EN] ； [EN] 。
+-  [EN]  HarmonyOS Sans  [EN] ；“About” [EN] ， [EN]  EXE  [EN] 。
+- README  [EN]  ECMA-267、ECMA-359、ISO/IEC 30190:2021  [EN] standard [EN] ； [EN] 、 [EN] 、 [EN] path [EN] 。
 
 ## [1.0.26] - 2026-09-12
 
-- 首次提供 GitHub Release：Windows x64 单文件 EXE 已内置 .NET，下载后即可运行。
-- 包含 CD WAV + CUE / RAW 音轨生成、DVD 绘图 ISO 与混合数据盘，以及 GUI、命令行、实时预览、环形复制和可编辑盘片预设。
-- 包含 CD WAV 与流式音轨的字节序修正，保留旧 RAW 兼容；用户实盘反馈确认修复后无重影。
-- 包含实验性 CD/DVD 直接刻录。已有部分实盘反馈，不同设备、盘片及各刻录入口的验证覆盖仍有限。
-- 发布程序由 GitHub Actions 构建，执行模块回归、DVD 自检、最终单文件 RAW/WAV 生成与 GUI 截图检查；发布说明提供 SHA-256 下载校验值。
-- 统一版本来源，修改版本号和对应发布日志后才生成发布包；支持预发布版本及手动重试，保留独立的 MSIX 打包流程。
+-  [EN]  GitHub Release：Windows x64  [EN]  EXE  [EN]  .NET， [EN] 。
+-  [EN]  CD WAV + CUE / RAW audio track [EN] 、DVD  [EN]  ISO  [EN] ， [EN]  GUI、 [EN] 、Live Preview、 [EN] Copy [EN] Disc Media [EN] 。
+-  [EN]  CD WAV  [EN] streamingaudio track [EN] bytes [EN] ， [EN]  RAW  [EN] ； [EN] ghosting。
+-  [EN]  CD/DVD  [EN] Burn。 [EN] ， [EN] 、Disc Media [EN] Burn [EN] 。
+-  [EN]  GitHub Actions  [EN] ， [EN] 、DVD  [EN] 、 [EN]  RAW/WAV  [EN]  GUI  [EN] ； [EN]  SHA-256  [EN] 。
+-  [EN] ， [EN] ； [EN] ， [EN]  MSIX  [EN] 。
 
-## 首次 GitHub 发布前的开发记录
+##  [EN]  GitHub  [EN] 
 
-以下为累计开发过程记录，验证状态反映各条记录对应的阶段；当前验证范围以 `docs/VALIDATION.md` 为准。
+ [EN] ， [EN] Status [EN] ； [EN]  `docs/VALIDATION.md`  [EN] 。
 
-- 新增 GitHub Actions 发布策略：以 `Directory.Build.props` 统一维护版本，仅在合并到 `main` 的变更同时修改版本与发布日志且完整版本变化时，经过 CI 和最终单文件验证后自动生成版本标签、自包含 Windows x64 EXE 与 GitHub Release 草稿；支持 alpha/beta/rc，发布说明包含 SHA-256，维护者检查后公开，已公开制品不覆盖。MSIX 保留手动通道并复用 CI，默认读取同一版本配置。
-- CD 文件输出默认改为标准 WAV（44.1 kHz、16 位、双声道 PCM），同时生成 `FILE ... WAVE` CUE：cdrecord 可直接读取 WAV，ImgBurn 打开配套 CUE；旧 `.raw` 仍保持大端字节序。WAV 在延迟交织完成后转为小端，CD 流式刻录显式采用相同的无头小端 PCM，修正与 IMAPI 音频输入约定不一致的问题。音轨预览支持 WAV 的 RIFF 块解析与字节序归一化。新增非对称音频样本和 Windows RAW 镜像字节保留回归。
-- DVD 流式刻录新增混合文件夹支持：先计算 ISO9660/Joliet 布局，再通过不可回退的前向流依次写入内圈文件、ECC 对齐填充和外圈图案，无需保存完整临时 ISO。
-- 将环形复制的正式生成中间图由 2048×2048 提升至 8192×8192，保存预览使用 4096×4096，实时预览使用 2048×2048；运行日志新增每份副本的实际像素尺寸，避免低分辨率中间图损失细节。
-- 新增盘片预设：CD 80/74 分钟、12 cm 单层 DVD、8 cm 单层 Mini DVD；生成页与实时预览页双向同步，手动改值后自动切换为“自定义参数”。
-- 新增“铼德医疗水蓝盘（实测）”CD 预设：24.911275–57.931155 mm、359845 扇区。
-- 新增“Verbatim CD-R AZO (43438)（实测）”CD 预设：24.837775–58.020875 mm、359848 扇区。
-- 新增“Verbatim DVD-R AZO (43533)（实测）”DVD 预设：23.9968875–57.9779875 mm、2,297,888 扇区。
-- CD/DVD 盘片预设改为分层 JSON：内置层随应用更新，用户层首次生成自定义 CD/DVD 参数并只保存新增、同 ID 覆盖和禁用项；预设只包含容量与生成几何，不再混入图片画布或实测校准参数。格式预留默认文本语言和名称/说明资源键，后续接入 i18n 无需破坏用户 JSON。界面支持打开和重新加载用户层，无效编辑会显示具体错误并保留上一次有效预设。
-- 盘片预设的小数参数改为按实际精度完整显示，不再固定截断为 3 位或 6 位小数。
-- 修正 CD 内置预设、GUI 和命令行默认扫描速度：由旧工具沿用的 1100 mm/s 改为 ECMA-130 范围下限 1200 mm/s，并增加标准范围回归检查。
-- 新增实验性的 CD 与纯绘图 DVD 流式直接刻录：生成器通过 64 MiB 有界内存缓冲向 Windows IMAPI2 连续供数，不保存完整 ISO/RAW；自动化测试已通过，实体盘验证仍待完成。
-- 修复 CD 流式刻录在部分刻录机上因冗余设置 `DoNotFinalizeMedia` 而返回 `0xC0AA0502` 的问题；会话关闭和防缓冲欠载改用 IMAPI2 安全默认值，并确保清理阶段的 `ReleaseMedia` 错误不会覆盖真正的首个写入错误。
-- CD 流式刻录由会额外占用 2 扇区并强制拒绝音轨的 Track-at-Once 改为 Raw CD/DAO：通过 Windows RAW 镜像构造器流式加入 lead-in、Cooked R-W 子通道和 lead-out，使实测 359,845 扇区内容刚好落在同一盘片的 DAO 合法边界；另保留最多 3 个 DAO 扇区的受限末端 overburn，超过时仍会在写入前拒绝。设备不报告速度时使用实机确认可接受的约 16× 稳定设置回退。
-- 流式刻录界面新增当前盘片支持的写入速度读取与选择；自动模式在刻录前重新读取当次 CD/DVD 介质并选择最低可用速率以降低错误率，手动选择保持不变，刻录时记录设备实际采用速度。
-- 根据 DVD 实盘结果反转 dispersion 黑白字节极性：黑色改用扰码域 `0xA5`，白色改用 `0x92`；纯绘图与混合流式刻录同步生效。
-- 将流式刻录的有界内存缓冲从 16 MiB 提升到 64 MiB，并将开刻前预填充从 8 MiB 提升到 32 MiB，为 16× DVD 写入提供更充足的生成抖动余量。
-- MSIX 打包前现在会清理 RID 构建缓存、检查发布期间的源码变动，并直接验证包内刻录组件已移除旧 `DoNotFinalizeMedia` 设置，防止主程序版本已更新但嵌入旧刻录 DLL。
-- 新增独立 `DiscImageStudio.Burning` 抽象层、刻录机枚举、空白盘/容量检查、二次确认、进度和取消处理；原镜像文件工作流保持不变。
-- 新增“环形复制（自动份数）”图片处理模式：同一源图自动复制多份、朝光盘外侧环形排列，并支持可调内外安全边界。
-- 修正环形复制布局：份数保持自动计算，空间不足时统一等比缩小所有副本，确保不变形、不裁切且彼此不重叠。
-- 新增独立 `DiscImageStudio.Imaging` 图片预处理层，CD、DVD 共用，并可供未来蓝光模块复用。
-- 独立实时预览页现同时支持 CD 与 DVD；对应参数双向同步，参数变化经 450ms 防抖后自动刷新。
-- CD 几何预览改为与 DVD 一致的采样平均灰度模式。
-- DVD 界面与模块固定使用快速纹理算法、快速输出和顺时针（CW）螺旋，不再显示算法与方向选择框。
-- 新增界面内 PNG 图片加载与展示，并修复日志框高度受全局输入框样式限制的问题。
-- 修复 .NET 9 WPF 使用 `StreamSource` 加载 PNG 时错误启用 URI 缓存忽略选项而导致预览加载失败的问题。
-- 修复签名 MSIX 中 CD 生成/预览写入运行日志时因 WPF 与不变区域模式冲突而崩溃的问题。
-- 新增统一 WPF GUI。
-- 合并 CD-DA 与 DVD 工作流，同时保持 DVD 引擎隔离。
-- 新增 `DiscImageStudio.Core` 光盘模块抽象层。
-- 新增 CD 与 DVD 模块适配器，并为未来蓝光模块预留扩展点。
-- 新增 MSIX 打包、商店资源、GitHub CI 与发布文档。
+-  [EN]  GitHub Actions  [EN] ： [EN]  `Directory.Build.props`  [EN] ， [EN]  `main`  [EN] ， [EN]  CI  [EN] 、 [EN]  Windows x64 EXE  [EN]  GitHub Release  [EN] ； [EN]  alpha/beta/rc， [EN]  SHA-256， [EN] ， [EN] 。MSIX  [EN]  CI， [EN] 。
+- CD  [EN] standard WAV（44.1 kHz、16  [EN] 、 [EN]  PCM）， [EN]  `FILE ... WAVE` CUE：cdrecord  [EN]  WAV，ImgBurn Open [EN]  CUE； [EN]  `.raw`  [EN] bytes [EN] 。WAV  [EN] Delayed interleavingcompleted [EN] ，CD streamingBurn [EN]  PCM， [EN]  IMAPI  [EN] 。audio track [EN]  WAV  [EN]  RIFF  [EN] bytes [EN] 。 [EN]  Windows RAW  [EN] bytes [EN] 。
+- DVD streamingBurn [EN] folder [EN] ： [EN]  ISO9660/Joliet  [EN] ， [EN] Inner Ring [EN] 、ECC  [EN] Outer Ring [EN] ， [EN] Save [EN]  ISO。
+-  [EN] Copy [EN]  2048×2048  [EN]  8192×8192，Save [EN]  4096×4096，Live Preview [EN]  2048×2048； [EN] pixels [EN] ， [EN] 。
+-  [EN] Disc Media [EN] ：CD 80/74 minutes、12 cm Single Layer DVD、8 cm Single Layer Mini DVD； [EN] Live Preview [EN] ， [EN] “Custom [EN] ”。
+-  [EN] “ [EN] （measured）”CD  [EN] ：24.911275–57.931155 mm、359845 sectors。
+-  [EN] “Verbatim CD-R AZO (43438)（measured）”CD  [EN] ：24.837775–58.020875 mm、359848 sectors。
+-  [EN] “Verbatim DVD-R AZO (43533) [Calibrated]”DVD  [EN] ：23.9968875–57.9779875 mm、2,297,888 sectors。
+- CD/DVD Disc Media [EN]  JSON： [EN] ， [EN] Custom [EN]  CD/DVD  [EN] Save [EN] 、 [EN]  ID  [EN] ； [EN] ， [EN] measured [EN] 。 [EN] / [EN] ， [EN]  i18n  [EN]  JSON。 [EN] Open [EN] ，invalid [EN] Error [EN] 。
+- Disc Media [EN] ， [EN]  3  [EN]  6  [EN] 。
+-  [EN]  CD  [EN] 、GUI  [EN] ： [EN]  1100 mm/s  [EN]  ECMA-130  [EN]  1200 mm/s， [EN] standard [EN] 。
+-  [EN]  CD  [EN]  DVD streaming [EN] Burn： [EN]  64 MiB  [EN]  Windows IMAPI2  [EN] ， [EN] Save [EN]  ISO/RAW； [EN] ， [EN] completed。
+-  [EN]  CD streamingBurn [EN] Recorder [EN]  `DoNotFinalizeMedia`  [EN]  `0xC0AA0502`  [EN] ； [EN] Close [EN]  IMAPI2  [EN] ， [EN]  `ReleaseMedia` Error [EN] Error。
+- CD streamingBurn [EN]  2 sectors [EN] audio track [EN]  Track-at-Once  [EN]  Raw CD/DAO： [EN]  Windows RAW  [EN] streaming [EN]  lead-in、Cooked R-W  [EN]  lead-out， [EN] measured 359,845 sectors [EN] Disc Media [EN]  DAO  [EN] ； [EN]  3  [EN]  DAO sectors [EN]  overburn， [EN] 。 [EN]  16×  [EN] 。
+- streamingBurn [EN] Disc Media [EN] ； [EN] Burn [EN]  CD/DVD  [EN] Error [EN] ， [EN] ，Burn [EN] 。
+-  [EN]  DVD  [EN]  dispersion  [EN] bytespolarity： [EN] scrambling [EN]  `0xA5`， [EN]  `0x92`； [EN] streamingBurn [EN] 。
+-  [EN] streamingBurn [EN]  16 MiB  [EN]  64 MiB， [EN]  8 MiB  [EN]  32 MiB， [EN]  16× DVD  [EN] Dither [EN] 。
+- MSIX  [EN]  RID  [EN] 、 [EN] ， [EN] Burn [EN]  `DoNotFinalizeMedia`  [EN] ， [EN] Burn DLL。
+-  [EN]  `DiscImageStudio.Burning`  [EN] 、Recorder [EN] 、 [EN] / [EN] 、 [EN] 、 [EN] Cancel [EN] ； [EN] 。
+-  [EN] “ [EN] Copy（ [EN] ）” [EN] ： [EN] Copy [EN] 、 [EN] Optical Disc [EN] ， [EN] 。
+-  [EN] Copy [EN] ： [EN] ， [EN] ， [EN] 、 [EN] 。
+-  [EN]  `DiscImageStudio.Imaging`  [EN] ，CD、DVD  [EN] ， [EN] Blu-ray [EN] 。
+-  [EN] Live Preview [EN]  CD  [EN]  DVD； [EN] ， [EN]  450ms  [EN] Refresh。
+- CD  [EN]  DVD  [EN] grayscale [EN] 。
+- DVD  [EN] 、 [EN] （CW） [EN] ， [EN] 。
+-  [EN]  PNG  [EN] ， [EN] 。
+-  [EN]  .NET 9 WPF  [EN]  `StreamSource`  [EN]  PNG  [EN] Error [EN]  URI  [EN] failed [EN] 。
+-  [EN]  MSIX  [EN]  CD  [EN] / [EN]  WPF  [EN] 。
+-  [EN]  WPF GUI。
+-  [EN]  CD-DA  [EN]  DVD  [EN] ， [EN]  DVD  [EN] 。
+-  [EN]  `DiscImageStudio.Core` Optical Disc [EN] 。
+-  [EN]  CD  [EN]  DVD  [EN] ， [EN] Blu-ray [EN] 。
+-  [EN]  MSIX  [EN] 、 [EN] 、GitHub CI  [EN] 。

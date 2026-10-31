@@ -35,10 +35,10 @@ internal static class BurnProgressDisplayTests
         // DVD is 1,385,000 B/s and BD is 4,500,000 B/s at 1x.
         (OpticalBurnMediaKind Kind, double BytesPerSecond, string Multiplier, string Rate)[] cases =
         [
-            (OpticalBurnMediaKind.CdAudio, 2_822_400, "16.0×", "实时 2.69 MiB/s"),
-            (OpticalBurnMediaKind.CdData, 2_457_600, "16.0×", "实时 2.34 MiB/s"),
-            (OpticalBurnMediaKind.DvdData, 5_540_000, "4.0×", "实时 5.28 MiB/s"),
-            (OpticalBurnMediaKind.BluRayData, 9_000_000, "2.0×", "实时 8.58 MiB/s"),
+            (OpticalBurnMediaKind.CdAudio, 2_822_400, "16.0×", " [EN]  2.69 MiB/s"),
+            (OpticalBurnMediaKind.CdData, 2_457_600, "16.0×", " [EN]  2.34 MiB/s"),
+            (OpticalBurnMediaKind.DvdData, 5_540_000, "4.0×", " [EN]  5.28 MiB/s"),
+            (OpticalBurnMediaKind.BluRayData, 9_000_000, "2.0×", " [EN]  8.58 MiB/s"),
         ];
         foreach (var sample in cases)
         {
@@ -46,7 +46,7 @@ internal static class BurnProgressDisplayTests
             display.Apply(new("write", "device write", 64 * MiB, 512 * MiB, sample.BytesPerSecond));
             Require(display.MultiplierText == sample.Multiplier, sample.Kind + " multiplier uses its payload convention");
             Require(display.RateText == sample.Rate, sample.Kind + " throughput displays binary MiB, not decimal MB");
-            Require(display.AmountText == "已写入 64.0 / 512.0 MiB", sample.Kind + " amount and total remain visible");
+            Require(display.AmountText == " [EN]  64.0 / 512.0 MiB", sample.Kind + " amount and total remain visible");
         }
     }
 
@@ -61,7 +61,7 @@ internal static class BurnProgressDisplayTests
         display.Apply(new("write", "device acknowledged", GiB, 4 * GiB, 8 * MiB));
         Require(display.WrittenBytes == GiB && display.Percent == 25,
             "the device counter advances the written fraction");
-        Require(display.AmountText == "已写入 1.00 / 4.00 GiB", "large disc amounts use a shared GiB unit");
+        Require(display.AmountText == " [EN]  1.00 / 4.00 GiB", "large disc amounts use a shared GiB unit");
 
         foreach (string stage in new[] { "transfer", "diagnostic", "speed", "future-stage" })
         {
@@ -83,18 +83,18 @@ internal static class BurnProgressDisplayTests
     private static void TestUnknownInvalidAndZeroRates()
     {
         BurnProgressDisplay display = new(OpticalBurnMediaKind.CdData, 100 * MiB, () => TimeSpan.Zero);
-        Require(display.RateText == "实时 — MiB/s" && display.MultiplierText == "—×",
+        Require(display.RateText == " [EN]  — MiB/s" && display.MultiplierText == "—×",
             "a missing device measurement is unavailable rather than a fabricated zero");
         foreach (double? invalid in new double?[] { null, double.NaN, double.PositiveInfinity, double.NegativeInfinity, -1 })
         {
             display.Apply(new("write", "measurement unavailable", 10 * MiB, 100 * MiB, invalid));
-            Require(display.BytesPerSecond is null && display.RateText == "实时 — MiB/s" && display.MultiplierText == "—×",
+            Require(display.BytesPerSecond is null && display.RateText == " [EN]  — MiB/s" && display.MultiplierText == "—×",
                 "missing, non-finite or negative measurements are unavailable");
             Require(display.WrittenBytes == 10 * MiB, "unavailable speed does not hide valid device-written bytes");
         }
 
         display.Apply(new("write", "device reports no new writes", 10 * MiB, 100 * MiB, 0));
-        Require(display.BytesPerSecond == 0 && display.RateText == "实时 0.00 MiB/s" && display.MultiplierText == "0.0×",
+        Require(display.BytesPerSecond == 0 && display.RateText == " [EN]  0.00 MiB/s" && display.MultiplierText == "0.0×",
             "a measured stall remains a real zero rather than unavailable telemetry");
     }
 
@@ -118,7 +118,7 @@ internal static class BurnProgressDisplayTests
         Require(display.BytesPerSecond == 9_000_000, "a recent device measurement remains usable");
         display.Apply(new("transfer", "producer keeps feeding", 3 * GiB, 4 * GiB));
         seconds = 3.01;
-        Require(display.BytesPerSecond is null && display.RateText == "实时 — MiB/s" && display.MultiplierText == "—×",
+        Require(display.BytesPerSecond is null && display.RateText == " [EN]  — MiB/s" && display.MultiplierText == "—×",
             "producer activity cannot keep a stale device rate alive past three seconds");
         Require(display.WrittenBytes == GiB, "telemetry expiry preserves confirmed bytes");
         display.Apply(new("write", "fresh sample after gap", 2 * GiB, 4 * GiB, 4_500_000));
@@ -172,7 +172,7 @@ internal static class BurnProgressDisplayTests
         completed.Apply(new("complete", "session closed", 4 * GiB, 4 * GiB));
         Require(completed.WrittenBytes == 4 * GiB && completed.Percent == 100,
             "successful completion fills the captured request total");
-        Require(completed.AmountText == "已写入 4.00 / 4.00 GiB" && completed.BytesPerSecond is null,
+        Require(completed.AmountText == " [EN]  4.00 / 4.00 GiB" && completed.BytesPerSecond is null,
             "completed totals stay visible without a stale writing rate");
         completed.Stop();
         Require(completed.WrittenBytes == 4 * GiB && completed.Percent == 100,

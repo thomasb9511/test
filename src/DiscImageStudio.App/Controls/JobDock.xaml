@@ -60,26 +60,26 @@
                     </ProgressBar.Style>
                 </ProgressBar>
                 <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Style="{StaticResource CompactButton}" Content="取消"
+                    <Button Style="{StaticResource CompactButton}" Content="Cancel"
                             Command="{Binding CancelJobCommand}" Margin="0,0,8,0"
                             Visibility="{Binding CancelJobVisibility}"
-                            ToolTip="停止正在运行且支持取消的任务。" />
+                            ToolTip="[EN]Cancel[EN]。" />
                     <!-- Result and log actions appear with the thing they act on: a project with
                          nothing generated yet shows only the status line. -->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
                                 Visibility="{Binding ResultActionsVisibility}">
-                        <Button Style="{StaticResource CompactButton}" Content="打开输出位置"
+                        <Button Style="{StaticResource CompactButton}" Content="OpenOutput location"
                                 Command="{Binding OpenOutputCommand}" Margin="0,0,8,0" />
-                        <Button Style="{StaticResource CompactButton}" Content="查看读回预览"
+                        <Button Style="{StaticResource CompactButton}" Content="[EN]"
                                 Command="{Binding PreviewLastOutputCommand}" Margin="0,0,8,0"
                                 Visibility="{Binding CanPreviewLastOutputVisibility}"
-                                ToolTip="把最近生成的文件作为输入镜像，在预览工作区模拟读回。" />
+                                ToolTip="[EN]Recent[EN]，[EN]。" />
                     </StackPanel>
-                    <Button Style="{StaticResource CompactButton}" Content="清空日志"
+                    <Button Style="{StaticResource CompactButton}" Content="[EN]"
                             Command="{Binding ClearLogCommand}" Margin="0,0,8,0"
                             Visibility="{Binding LogActionsVisibility}" />
                     <Button Style="{StaticResource IconButton}" Command="{Binding ToggleJobDockCommand}"
-                            AutomationProperties.Name="任务详情" ToolTip="任务详情 / 运行日志"
+                            AutomationProperties.Name="[EN]" ToolTip="[EN] / [EN]"
                             Visibility="{Binding DockToggleVisibility}">
                         <!-- Collapsed points up (tap to expand); expanded points down
                              (tap to collapse), matching every bottom-dock convention. -->

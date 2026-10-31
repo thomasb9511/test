@@ -50,7 +50,7 @@ internal sealed class ImapiWriteProgressReporter
                 {
                     bool finalizing = action == (rawCd ? 3 : 5) || (!rawCd && action is 6 or 7);
                     ReportStage(finalizing ? "finalize" : "media",
-                        finalizing ? "正在刷新缓存并关闭刻录会话…" : "正在准备盘片和写入设备…");
+                        finalizing ? "[EN]Refresh[EN]CloseBurn[EN]…" : "[EN]Disc Media[EN]…");
                     return;
                 }
             }
@@ -62,7 +62,7 @@ internal sealed class ImapiWriteProgressReporter
         {
             // Telemetry is optional. An unavailable event property must not abort
             // a burn or turn stream consumption into fabricated write telemetry.
-            ReportStage("write", "正在写入，等待刻录机进度…");
+            ReportStage("write", "Writing ，[EN]Recorder[EN]…");
             return;
         }
 
@@ -72,7 +72,7 @@ internal sealed class ImapiWriteProgressReporter
             // ISO payload only, so lead-in sectors must not advance its byte counter.
             if (last < 0)
             {
-                ReportStage("media", "正在写入 CD 导入区…");
+                ReportStage("media", "Writing  CD Import[EN]…");
                 return;
             }
             start = Math.Max(0, start);
@@ -106,7 +106,7 @@ internal sealed class ImapiWriteProgressReporter
         (TimeSpan firstTime, long firstBytes) = _samples.Peek();
         double seconds = (now - firstTime).TotalSeconds;
         double? rate = seconds >= 1 ? (completed - firstBytes) / seconds : null;
-        string label = acceptedByDevice ? "刻录机已接收" : "正在刻录";
+        string label = acceptedByDevice ? "Recorder[EN]" : "Burning in progress";
         Publish(new("write",
             $"{label} {completed / (1024.0 * 1024.0):F1} / {_totalBytes / (1024.0 * 1024.0):F1} MiB…",
             completed, _totalBytes, rate));

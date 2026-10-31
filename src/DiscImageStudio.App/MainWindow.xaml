@@ -53,7 +53,7 @@
                             </Grid.ColumnDefinitions>
                             <Button x:Name="BackHomeButton" Style="{StaticResource GhostButton}"
                                     Width="32" Height="32" Padding="0" Focusable="False"
-                                    AutomationProperties.Name="返回主页" ToolTip="返回主页"
+                                    AutomationProperties.Name="[EN]Home" ToolTip="[EN]Home"
                                     Command="{Binding BackHomeCommand}">
                                 <iconPacks:PackIconLucide Kind="ChevronLeft" Width="17" Height="17"
                                                           Foreground="{StaticResource TextSecondaryBrush}" />
@@ -61,7 +61,7 @@
                             <Grid x:Name="ProjectHeaderHost" Grid.Column="1" Margin="8,0,0,0">
                                 <Button x:Name="ProjectHeaderButton" Style="{StaticResource TileButton}"
                                         Padding="6,2" Focusable="False"
-                                        ToolTip="工程设置"
+                                        ToolTip="Project Settings"
                                         Click="EditProject_Click">
                                     <StackPanel>
                                         <TextBlock x:Name="ProjectNameText" FontSize="14" FontWeight="Bold"
@@ -73,7 +73,7 @@
                                                 <TextBlock x:Name="ProjectFamilyText"
                                                            Style="{StaticResource BadgeText}" />
                                             </Border>
-                                            <TextBlock x:Name="ProjectDirtyText" Text="未保存"
+                                            <TextBlock x:Name="ProjectDirtyText" Text="Unsaved"
                                                        Style="{StaticResource MicroText}"
                                                        Foreground="{StaticResource WarningBrush}"
                                                        Margin="6,0,0,0" Visibility="Collapsed" />
@@ -115,7 +115,7 @@
                                         <iconPacks:PackIconLucide Kind="Check" Width="10" Height="10"
                                                                   VerticalAlignment="Center"
                                                                   Foreground="{StaticResource SuccessBrush}" />
-                                        <TextBlock Text="参数已更新" Style="{StaticResource BadgeText}"
+                                        <TextBlock Text="Parameters Updated" Style="{StaticResource BadgeText}"
                                                    Foreground="{StaticResource SuccessBrush}"
                                                    VerticalAlignment="Center" Margin="4,0,0,0" />
                                     </StackPanel>
@@ -133,26 +133,26 @@
 
                         <!-- Icon-only rows keep the collapsed 72px bar a flat rail, matching
                              the About entry below. -->
-                        <controls:SideNavItem x:Name="NavDesign" LabelText="设计"
+                        <controls:SideNavItem x:Name="NavDesign" LabelText="Design"
                                               IconKind="Palette" />
-                        <controls:SideNavItem x:Name="NavPreview" LabelText="预览"
+                        <controls:SideNavItem x:Name="NavPreview" LabelText="[EN]"
                                               IconKind="Eye" />
-                        <controls:SideNavItem x:Name="NavExport" LabelText="导出"
+                        <controls:SideNavItem x:Name="NavExport" LabelText="Export"
                                               IconKind="FileDown" />
-                        <controls:SideNavItem x:Name="NavBurn" LabelText="刻录"
+                        <controls:SideNavItem x:Name="NavBurn" LabelText="Burn"
                                               IconKind="Flame" />
-                        <controls:SideNavItem x:Name="NavCalibration" LabelText="标定"
+                        <controls:SideNavItem x:Name="NavCalibration" LabelText="calibration"
                                               IconKind="Crosshair" />
                     </StackPanel>
 
                     <StackPanel x:Name="BottomNavPanel" Grid.Row="1" VerticalAlignment="Bottom">
-                        <controls:SideNavItem x:Name="NavAbout" LabelText="关于" IconKind="Info"
+                        <controls:SideNavItem x:Name="NavAbout" LabelText="About" IconKind="Info"
                                               Activated="NavAbout_Activated" />
                     </StackPanel>
 
                     <Button x:Name="SidebarCollapseToggle" Grid.Row="2" Height="40" Margin="0,8,0,16"
                             Style="{StaticResource GhostButton}" Padding="0" Focusable="False"
-                            ToolTip="收起侧边栏" Click="SidebarCollapseToggle_Click">
+                            ToolTip="[EN]" Click="SidebarCollapseToggle_Click">
                         <Grid>
                             <iconPacks:PackIconLucide x:Name="CollapseLeftIcon" Kind="ChevronLeft"
                                                       Width="20" Height="20" HorizontalAlignment="Left"

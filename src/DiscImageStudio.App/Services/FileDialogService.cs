@@ -18,8 +18,8 @@ internal sealed class FileDialogService
     {
         OpenFileDialog dialog = new()
         {
-            Title = "选择源图片",
-            Filter = "图片文件|*.png;*.jpg;*.jpeg;*.bmp;*.tif;*.tiff;*.gif|所有文件|*.*",
+            Title = "[EN]",
+            Filter = "[EN]|*.png;*.jpg;*.jpeg;*.bmp;*.tif;*.tiff;*.gif|All Files|*.*",
             CheckFileExists = true,
         };
         return dialog.ShowDialog(_ownerProvider()) == true ? dialog.FileName : null;
@@ -30,8 +30,8 @@ internal sealed class FileDialogService
     {
         OpenFileDialog dialog = new()
         {
-            Title = "导入图片",
-            Filter = "图片文件|*.png;*.jpg;*.jpeg;*.bmp;*.tif;*.tiff;*.gif|所有文件|*.*",
+            Title = "Import[EN]",
+            Filter = "[EN]|*.png;*.jpg;*.jpeg;*.bmp;*.tif;*.tiff;*.gif|All Files|*.*",
             CheckFileExists = true,
             Multiselect = true,
         };
@@ -53,7 +53,7 @@ internal sealed class FileDialogService
     {
         SaveFileDialog dialog = new()
         {
-            Title = "选择输出位置",
+            Title = "[EN]Output location",
             Filter = filter,
             DefaultExt = extension,
             AddExtension = true,

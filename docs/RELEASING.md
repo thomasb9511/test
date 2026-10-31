@@ -1,87 +1,87 @@
-# 发布指南
+#  [EN] 
 
-## 分支与版本政策
+##  [EN] 
 
-日常开发使用 `main` 加短期功能分支，通过 Pull Request 合并。修复版本也从 `main` 发布；暂不维护长期发布分支。
+ [EN]  `main`  [EN] ， [EN]  Pull Request  [EN] 。 [EN]  `main`  [EN] ； [EN] 。
 
-版本统一在仓库根目录的 `Directory.Build.props` 中维护。维护者按改动选择下一个版本：
+ [EN] directory [EN]  `Directory.Build.props`  [EN] 。 [EN] ：
 
-| 改动 | 版本变化 | 示例 |
+|  [EN]  |  [EN]  |  [EN]  |
 | --- | --- | --- |
-| 向后兼容的问题修复 | patch | `1.0.26` → `1.0.27` |
-| 向后兼容的新功能 | minor | `1.0.26` → `1.1.0` |
-| 不兼容的接口、命令或文件格式变化 | major | `1.0.26` → `2.0.0` |
+|  [EN]  | patch | `1.0.26` → `1.0.27` |
+|  [EN]  | minor | `1.0.26` → `1.1.0` |
+|  [EN] 、 [EN]  | major | `1.0.26` → `2.0.0` |
 
-正式版在 `VersionPrefix` 中填写 `A.B.C`，将 `VersionSuffix` 留空；预发布在 `VersionSuffix` 中填写 `alpha.N`、`beta.N` 或 `rc.N`，其中 `N` 是不带前导零的正整数。例如 `VersionPrefix=1.0.27`、`VersionSuffix=rc.1` 对应 `1.0.27-rc.1`，不要把后缀写入 `VersionPrefix`。候选版转正式版时清空 `VersionSuffix`。
+ [EN]  `VersionPrefix`  [EN]  `A.B.C`， [EN]  `VersionSuffix`  [EN] ； [EN]  `VersionSuffix`  [EN]  `alpha.N`、`beta.N`  [EN]  `rc.N`， [EN]  `N`  [EN] 。 [EN]  `VersionPrefix=1.0.27`、`VersionSuffix=rc.1`  [EN]  `1.0.27-rc.1`， [EN]  `VersionPrefix`。 [EN]  `VersionSuffix`。
 
-GitHub Actions 从配置读取完整版本，自动创建对应的 `vA.B.C` 或 `vA.B.C-rc.N` 等标签。发布 EXE 的信息版本保留预发布后缀；文件版本与程序集版本使用四段数字 `A.B.C.0`。仓库数字段限制为 `0..65534`，以兼容 .NET 程序集版本；提交 Microsoft Store 时第一段还必须大于 `0`，MSIX 版本为 `A.B.C.0`。
+GitHub Actions  [EN] ， [EN]  `vA.B.C`  [EN]  `vA.B.C-rc.N`  [EN] 。 [EN]  EXE  [EN] ； [EN]  `A.B.C.0`。 [EN]  `0..65534`， [EN]  .NET  [EN] ； [EN]  Microsoft Store  [EN] must [EN]  `0`，MSIX  [EN]  `A.B.C.0`。
 
-## GitHub Actions 发布 EXE
+## GitHub Actions  [EN]  EXE
 
-### 准备发布
+###  [EN] 
 
-1. 确认 GPL-3.0-or-later 许可证、隐私政策与支持联系方式已满足本次分发要求。发布时保留指向构建提交的标签，并在同一 Release 提供该版本完整对应源代码及构建说明，确保源代码可与 EXE/MSIX 一同获取；核对 GitHub 自动生成的源码归档包含构建所需文件。升级依赖或自包含 .NET 运行时时同步更新 [第三方声明](../THIRD-PARTY-NOTICES.txt)。项目许可证、第三方声明和字体协议均嵌入应用，可在“关于”页离线查看；授权边界见 [LICENSE-NOTICE.md](../LICENSE-NOTICE.md)。
-2. 在功能分支修改 `Directory.Build.props` 的 `VersionPrefix`（预发布同时设置 `VersionSuffix`），并把本次内容从 `CHANGELOG.md` 的 `Unreleased` 整理到对应版本段。保留 `## Unreleased`，用于后续开发。
-3. 版本段标题必须使用 `## [1.0.27] - YYYY-MM-DD` 或 `## [1.0.27-rc.1] - YYYY-MM-DD` 的形式，将日期占位符替换为实际发布日期，且段落内容不能为空。预发布和正式版各自需要与标签完全对应的版本段。
-4. 将版本配置和发布日志放入同一个发布准备 PR，确认 `build` 工作流通过后合并到 `main`。该次 push 的变更范围必须同时包含这两个文件，且配置中的完整版本必须实际变化，才会启动自动发布。
-5. GitHub Actions 完成检查、自动创建版本标签并生成 Release 草稿；维护者检查后手动公开。
+1.  [EN]  GPL-3.0-or-later  [EN] 、 [EN] 。 [EN] ， [EN]  Release  [EN] ， [EN]  EXE/MSIX  [EN] ； [EN]  GitHub  [EN] 。 [EN]  .NET  [EN]  [ [EN] ](../THIRD-PARTY-NOTICES.txt)。 [EN] 、 [EN] ， [EN] “About” [EN] ； [EN]  [LICENSE-NOTICE.md](../LICENSE-NOTICE.md)。
+2. 在功能分支修改 `Directory.Build.props` 的 `VersionPrefix`（预发布同时设置 `VersionSuffix`），并把本次内容从 `CHANGELOG.md` 的 `Unreleased` 整理到对应版本段。保留 `## Unreleased`， [EN] 。
+3. 版本段标题must使用 `## [1.0.27] - YYYY-MM-DD`  [EN]  `## [1.0.27-rc.1] - YYYY-MM-DD`  [EN] ， [EN] ， [EN] cannot be empty. [EN] 。
+4.  [EN]  PR， [EN]  `build`  [EN]  `main`。 [EN]  push  [EN] must [EN] ， [EN] must [EN] ， [EN] 。
+5. GitHub Actions completed [EN] 、 [EN]  Release  [EN] ； [EN] 。
 
-例如未来修复版在 `Directory.Build.props` 中设置：
+ [EN]  `Directory.Build.props`  [EN] ：
 
 ```xml
 <VersionPrefix>1.0.27</VersionPrefix>
 <VersionSuffix></VersionSuffix>
 ```
 
-同时在 `CHANGELOG.md` 中新增非空的 `## [1.0.27] - YYYY-MM-DD` 版本段并填写实际日期，合并到 `main` 后自动生成 `v1.0.27` 标签。候选版则将 `VersionSuffix` 设为 `rc.1`，日志版本写为 `1.0.27-rc.1`。
+同时在 `CHANGELOG.md` 中新增非空的 `## [1.0.27] - YYYY-MM-DD`  [EN] ， [EN]  `main`  [EN]  `v1.0.27`  [EN] 。 [EN]  `VersionSuffix`  [EN]  `rc.1`， [EN]  `1.0.27-rc.1`。
 
-### 自动检查与草稿
+###  [EN] 
 
-`.github/workflows/release.yml` 关注 `main` 上对 `Directory.Build.props` 或 `CHANGELOG.md` 的变更，但只有该次 push **同时修改版本配置与发布日志，且完整版本变化**才进入发布流程。普通代码 push 只运行常规构建检查；仅补充 `Unreleased` 或未改版本的配置调整不会生成 Release。
+`.github/workflows/release.yml`  [EN]  `main`  [EN]  `Directory.Build.props`  [EN]  `CHANGELOG.md`  [EN] ， [EN]  push ** [EN] ， [EN] ** [EN] 。 [EN]  push  [EN] ； [EN]  `Unreleased`  [EN]  Release。
 
-工作流从配置读取完整版本，校验格式及对应的非空、带日期 Changelog 段，确认发布提交属于 `origin/main`，并复用 `build.yml` 的构建与回归检查。全部通过后才生成发布 EXE、对应版本标签与草稿，无需手动创建或推送标签。
+ [EN] ， [EN] 、 [EN]  Changelog  [EN] ， [EN]  `origin/main`， [EN]  `build.yml`  [EN] 。 [EN]  EXE、 [EN] ， [EN] 。
 
-GitHub Actions 生成包含 .NET 运行时的 Windows x64 单文件 EXE，无需另装 .NET。打包后将最终 EXE 单独放入隔离目录运行，执行自检、两扇区 RAW/WAV 生成检查及 GUI 截图检查，确认下载单个文件即可使用，再计算 SHA-256。GitHub Release 只附加该 EXE，例如：
+GitHub Actions  [EN]  .NET  [EN]  Windows x64  [EN]  EXE， [EN]  .NET。 [EN]  EXE  [EN] directory [EN] ， [EN] 、 [EN] sectors RAW/WAV  [EN]  GUI  [EN] ， [EN] ， [EN]  SHA-256。GitHub Release  [EN]  EXE， [EN] ：
 
 ```text
 DiscImageStudio-v1.0.27-win-x64.exe
 ```
 
-SHA-256 校验值写入 Release 说明，供下载后核对。工作流使用内置 `GITHUB_TOKEN` 创建 **GitHub Release 草稿**，无需配置个人访问令牌（PAT）。预发布标签自动设置 prerelease 标志；正式标签创建正式版草稿。它不会自动公开草稿，也不会提交到 Microsoft Store 或发布自签名测试证书。
+SHA-256  [EN]  Release  [EN] ， [EN] 。 [EN]  `GITHUB_TOKEN`  [EN]  **GitHub Release  [EN] **， [EN] （PAT）。 [EN]  prerelease  [EN] ； [EN] 。 [EN] ， [EN]  Microsoft Store  [EN] 。
 
-维护者在 GitHub 的 [Releases 页面](https://github.com/JiaFeiMiao-K-Cat/DiscImageStudio/releases) 检查草稿中的版本、发布说明、EXE 和校验值，并下载验证启动后，再手动公开。可用下列命令计算下载文件的 SHA-256，与 Release 说明中的值比较：
+维护者在 GitHub 的 [Releases 页面](https://github.com/JiaFeiMiao-K-Cat/DiscImageStudio/releases)  [EN] 、 [EN] 、EXE  [EN] ， [EN] ， [EN] 。 [EN]  SHA-256， [EN]  Release  [EN] ：
 
 ```powershell
 Get-FileHash .\DiscImageStudio-v1.0.27-win-x64.exe -Algorithm SHA256
 ```
 
-### 失败重试与更正
+### failed [EN] 
 
-可以重跑失败的 Actions 运行，也可以在 GitHub Actions 从 `main` 手动运行 `release` 工作流。手动触发没有标签输入，读取 `main` 当前配置和发布日志并执行全部发布检查，无需再次修改版本文件来重试。
+ [EN] failed [EN]  Actions  [EN] ， [EN]  GitHub Actions  [EN]  `main`  [EN]  `release`  [EN] 。 [EN] ， [EN]  `main`  [EN] ， [EN] 。
 
-同一版本重试时，已有标签必须指向本次构建的同一提交，且已有 Release 必须仍为草稿。已经公开的 Release、标签与制品不得覆盖或移动；发现问题时，从 `main` 修复并发布新版本，预发布迭代则增加序号，例如 `rc.1` → `rc.2`。如果 `main` 已前进且同版本标签指向旧提交，应重跑原先失败的运行，或为新提交准备新版本。仅修改发布说明也应保留事实与更正记录，不得替换已公开的二进制文件。
+ [EN] ， [EN] must [EN] ， [EN]  Release must [EN] 。 [EN]  Release、 [EN] ； [EN] ， [EN]  `main`  [EN] ， [EN] ， [EN]  `rc.1` → `rc.2`。 [EN]  `main`  [EN] ， [EN] failed [EN] ， [EN] 。 [EN] ， [EN] 。
 
-建议仓库管理员在 GitHub 配置 `main` 分支保护，要求 Pull Request 和 `build` 必需检查；为 `v*` 标签设置规则集，允许发布工作流创建标签并禁止更新、删除。工作流文件不等同于远端保护设置，这些保护需要管理员另行配置。
+ [EN]  GitHub  [EN]  `main`  [EN] ， [EN]  Pull Request  [EN]  `build`  [EN] ； [EN]  `v*`  [EN] ， [EN] 、Delete。 [EN] ， [EN] 。
 
-## 本地 EXE 演练
+##  [EN]  EXE  [EN] 
 
-在仓库根目录运行与 GitHub Actions 相同的打包脚本：
+ [EN] directory [EN]  GitHub Actions  [EN] ：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File packaging/Build-Release.ps1
 ```
 
-脚本自动使用 `Directory.Build.props` 中的版本。例如配置为 `1.0.26` 时，输出目录为 `artifacts/release/v1.0.26/`。脚本构建并单独验证自包含 `win-x64` EXE，生成 `DiscImageStudio-v1.0.26-win-x64.exe` 和 `SHA256SUMS.txt`；校验文件供本地检查和工作流生成 Release 说明使用，不作为 Release 附件。本地演练不要求已有版本标签或 Changelog 发布段，也不会创建 GitHub Release；正式发布必须满足上面的全部检查。
+ [EN]  `Directory.Build.props`  [EN] 。 [EN]  `1.0.26`  [EN] ， [EN] directory [EN]  `artifacts/release/v1.0.26/`。 [EN]  `win-x64` EXE， [EN]  `DiscImageStudio-v1.0.26-win-x64.exe`  [EN]  `SHA256SUMS.txt`； [EN]  Release  [EN] ， [EN]  Release  [EN] 。 [EN]  Changelog  [EN] ， [EN]  GitHub Release； [EN] must [EN] 。
 
 ## Microsoft Store MSIX
 
-MSIX 是独立的手动分发通道。先在 Partner Center 保留产品名，并从 Product identity 页面复制：
+MSIX  [EN] 。 [EN]  Partner Center  [EN] ， [EN]  Product identity  [EN] Copy：
 
 - Package/Identity/Name
 - Package/Identity/Publisher
 - Package/Properties/PublisherDisplayName
 
-本地执行：
+ [EN] ：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File packaging/Build-MSIX.ps1 `
@@ -91,29 +91,29 @@ powershell -ExecutionPolicy Bypass -File packaging/Build-MSIX.ps1 `
   -DisplayName "Reserved product name"
 ```
 
-未填写 `-Version` 时，从 `Directory.Build.props` 读取正式版本并转换为 `A.B.C.0`。需要明确指定商店版本时，使用 `-Version "1.0.26.0"`；此覆盖值也会同步到包内 EXE 的版本，避免清单与程序版本不一致。Microsoft Store 通道不接受 `-rc.1` 等预发布后缀；准备 Store 包时应使用正式版本配置。
+ [EN]  `-Version`  [EN] ， [EN]  `Directory.Build.props`  [EN]  `A.B.C.0`。 [EN] ， [EN]  `-Version "1.0.26.0"`； [EN]  EXE  [EN] ， [EN] 。Microsoft Store  [EN]  `-rc.1`  [EN] ； [EN]  Store  [EN] 。
 
-也可以在 GitHub Actions 手动运行 `package-msix` 工作流并填写相同值，`version` 留空时同样读取仓库配置。该工作流先复用 `build.yml` 的 CI，再生成 MSIX 作为 Actions 附件；它不会自动提交商店或附加到 GitHub Release。生成的 Store MSIX 可以保持未签名；若要旁加载测试，需使用 Publisher 匹配的证书签名。
+ [EN]  GitHub Actions  [EN]  `package-msix`  [EN] ，`version`  [EN] 。 [EN]  `build.yml`  [EN]  CI， [EN]  MSIX  [EN]  Actions  [EN] ； [EN]  GitHub Release。 [EN]  Store MSIX  [EN] ； [EN] ， [EN]  Publisher  [EN] 。
 
-## 本机签名测试包
+##  [EN] 
 
-为本机测试创建主题与测试 Publisher 完全一致的代码签名证书，把公钥证书放到：
+ [EN]  Publisher  [EN] ， [EN] ：
 
 ```text
 artifacts/certificates/DiscImageStudio-Test.cer
 ```
 
-使用证书指纹运行 `Build-MSIX.ps1 -CertificateThumbprint <thumbprint>`（同时填写上文的身份参数）生成签名包。然后双击 `packaging/Install-TestPackage.cmd`，或运行：
+ [EN]  `Build-MSIX.ps1 -CertificateThumbprint <thumbprint>`（ [EN] ） [EN] 。 [EN]  `packaging/Install-TestPackage.cmd`， [EN] ：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File packaging/Install-TestPackage.ps1
 ```
 
-安装脚本会请求一次管理员权限，将测试证书公钥导入“本地计算机/受信任人”，并安装签名 MSIX。不要把私钥或 PFX 文件提交到 GitHub，也不要把本机自签名测试证书作为正式 Release 附件。
+ [EN] ， [EN] Import“ [EN] / [EN] ”， [EN]  MSIX。 [EN]  PFX  [EN]  GitHub， [EN]  Release  [EN] 。
 
-## Windows 11 未签名快速测试（可选）
+## Windows 11  [EN] （ [EN] ）
 
-未签名测试包必须使用独立的 OID 发布者命名空间，不能与商店正式身份混用。生成本机测试包：
+ [EN] must [EN]  OID  [EN] ，cannot [EN] 。 [EN] ：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File packaging/Build-MSIX.ps1 `
@@ -125,19 +125,19 @@ powershell -ExecutionPolicy Bypass -File packaging/Build-MSIX.ps1 `
   -UnsignedDevelopmentPackage
 ```
 
-然后用管理员 PowerShell 安装：
+ [EN]  PowerShell  [EN] ：
 
 ```powershell
 Add-AppxPackage -Path ".\artifacts\msix\DiscImageStudio_1.0.26.0_x64_unsigned-dev.msix" -AllowUnsigned
 ```
 
-`-UnsignedDevelopmentPackage` 只用于支持该功能的 Windows 11 系统快速测试；部分 Windows 版本即使提供 `-AllowUnsigned` 仍可能拒绝可执行包，此时使用上面的签名测试方案。准备分发或提交 Microsoft Store 时不要使用该选项，正式包仍需使用 Partner Center 的真实身份。
+`-UnsignedDevelopmentPackage`  [EN]  Windows 11  [EN] ； [EN]  Windows  [EN]  `-AllowUnsigned`  [EN] ， [EN] 。 [EN]  Microsoft Store  [EN] ， [EN]  Partner Center  [EN] 。
 
-正式提交前：
+ [EN] ：
 
-- 用真实身份重新打包，不能提交测试 Identity 包。
-- 在干净的 Windows 设备上测试安装、卸载和离线运行。
-- 对最终包运行 Windows App Certification Kit。
-- 提供至少一张 1366×768 或更大的真实桌面截图。
-- 将 `PRIVACY.md` 发布到公开 HTTPS 页面并填写真实支持联系方式。
-- 在认证备注中说明应用生成大文件、无需登录、不联网，并包含使用 Windows IMAPI2 的实验性 CD/DVD 直接刻录功能；如实列出适用的设备、空白盘片要求与当前验证范围。
+-  [EN] ，cannot [EN]  Identity  [EN] 。
+-  [EN]  Windows  [EN] 、 [EN] 。
+-  [EN]  Windows App Certification Kit。
+-  [EN]  1366×768  [EN] 。
+-  [EN]  `PRIVACY.md`  [EN]  HTTPS  [EN] 。
+-  [EN] 、 [EN] 、 [EN] ， [EN]  Windows IMAPI2  [EN]  CD/DVD  [EN] Burn [EN] ； [EN] 、 [EN] Disc Media [EN] 。

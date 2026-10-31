@@ -40,12 +40,12 @@ public partial class CalibrationViewModel
     }
     [ObservableProperty] private int _selectedTraceArm;
     /// <summary>Outer/inner-edge deviations of the last rectification; empty until a fit
-    /// exists. This is the only line under 确认矫正.</summary>
+    /// exists. This is the only line under [Translated comment]rectification.</summary>
     [ObservableProperty] private string _rectificationSummary = string.Empty;
-    public string TraceSummary => $"已保留 {TracePoints.Count} 点 · 偏离点自动标红";
+    public string TraceSummary => $"[EN] {TracePoints.Count} [EN] · [EN]";
     public IReadOnlyList<PhotoDiscSize> PhysicalDiscSizeChoices { get; } =
-        [new("标准光盘 · 12 cm", 60), new("小光盘 · 8 cm", 40)];
-    [ObservableProperty] private PhotoDiscSize _selectedPhysicalDiscSize = new("标准光盘 · 12 cm", 60);
+        [new("standardOptical Disc · 12 cm", 60), new("[EN]Optical Disc · 8 cm", 40)];
+    [ObservableProperty] private PhotoDiscSize _selectedPhysicalDiscSize = new("standardOptical Disc · 12 cm", 60);
 
     public IAsyncRelayCommand ImportPhotoCommand { get; private set; } = null!;
     public IAsyncRelayCommand RectifyPhotoCommand { get; private set; } = null!;
@@ -142,13 +142,13 @@ public partial class CalibrationViewModel
 
     private async Task ImportPhotoAsync()
     {
-        string? path = _shell.Dialogs?.PickOpen(title: "导入标定盘照片", filter: "照片或扫描图|*.png;*.jpg;*.jpeg;*.bmp;*.tif;*.tiff");
+        string? path = _shell.Dialogs?.PickOpen(title: "Importcalibration[EN]", filter: "[EN]|*.png;*.jpg;*.jpeg;*.bmp;*.tif;*.tiff");
         if (path is not null) await ImportPhotoFromAsync(path);
     }
 
     internal async Task ImportPhotoFromAsync(string path)
     {
-        await RunAsync("正在读取照片…", async token =>
+        await RunAsync("[EN]…", async token =>
         {
             var result = await Task.Run(() =>
             {
@@ -160,7 +160,7 @@ public partial class CalibrationViewModel
             InvalidatePhotoRectification();
             PhotoImage = result.Image; _photoPng = result.Png;
             SetBoundaryPoints(result.Contours.Outer, result.Contours.Hole);
-            _statusMessage = "照片已导入。请把两组控制点拖到光盘实体外缘和实体内缘，然后计算矫正。";
+            _statusMessage = "[EN]Import。[EN]Optical Disc[EN]，[EN]Calculate Rectification。";
             RefreshCommands();
         });
     }
@@ -193,7 +193,7 @@ public partial class CalibrationViewModel
         double radius = SelectedPhysicalDiscSize.OuterRadiusMm;
         double canvasRadius = PhotoCanvasRadiusMm;
         long revision = _photoRevision;
-        await RunAsync("正在根据实体边缘矫正照片…", async token =>
+        await RunAsync("[EN]rectification[EN]…", async token =>
         {
             var fit = await Task.Run(() => CalibrationPhotoRectifier.Fit(outer, hole, radius, 7.5, token), token);
             if (!fit.Succeeded || fit.Transform is null) throw new ArgumentException(fit.Message);
@@ -203,10 +203,10 @@ public partial class CalibrationViewModel
             _photoTransform = fit.Transform;
             RectifiedPhoto = corrected;
             PhotoBoundaryContours = BoundaryContours(fit.Transform, radius);
-            RectificationSummary = $"外缘偏差 {fit.OuterRmsPixels:0.0} 像素 · 内缘偏差 {fit.HoleRmsPixels:0.0} 像素";
+            RectificationSummary = $"[EN]deviation {fit.OuterRmsPixels:0.0} pixels · [EN]deviation {fit.HoleRmsPixels:0.0} pixels";
             IsRectificationReady = true;
             PreviewRectification = true;
-            _statusMessage = "矫正预览已生成。检查盘面恢复正视效果后，确认并开始描线。";
+            _statusMessage = "rectification[EN]。[EN]disc surface[EN]，[EN]。";
             RefreshPhotoCommands();
         });
     }
@@ -285,14 +285,14 @@ public partial class CalibrationViewModel
         using MemoryStream stream = new(Convert.FromBase64String(png));
         var frame = BitmapDecoder.Create(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad).Frames[0];
         if (frame.PixelWidth is < 32 or > 2000 || frame.PixelHeight is < 32 or > 2000)
-            throw new ArgumentException("标定记录中的照片尺寸无效，请重新导入。");
+            throw new ArgumentException("calibration[EN]invalid，[EN]Import。");
         frame.Freeze();
         return frame;
     }
 
     internal async Task LoadSessionFromAsync(string path)
     {
-        await RunAsync("正在恢复标定照片与记录…", async token =>
+        await RunAsync("[EN]calibration[EN]…", async token =>
         {
             var prepared = await Task.Run(() =>
             {
@@ -304,7 +304,7 @@ public partial class CalibrationViewModel
                 {
                     image = DecodePhoto(photo.ImagePngBase64);
                     if (photo.OuterBoundary.Concat(photo.HoleBoundary).Any(p => p.X >= image.PixelWidth || p.Y >= image.PixelHeight))
-                        throw new ArgumentException("标定轮廓超出照片范围。");
+                        throw new ArgumentException("calibration[EN]exceeds[EN]。");
                     if (photo.RectificationConfirmed)
                     {
                         fit = CalibrationPhotoRectifier.Fit(photo.OuterBoundary, photo.HoleBoundary, photo.PhysicalOuterRadiusMm, 7.5, token);
@@ -331,11 +331,11 @@ public partial class CalibrationViewModel
                     .OrderBy(p => p.XMm * p.XMm + p.YMm * p.YMm).ToArray();
                 IsPhotoStep = !photo.RectificationConfirmed;
                 RectificationSummary = prepared.Fit is { } restoredFit
-                    ? $"外缘偏差 {restoredFit.OuterRmsPixels:0.0} 像素 · 内缘偏差 {restoredFit.HoleRmsPixels:0.0} 像素"
+                    ? $"[EN]deviation {restoredFit.OuterRmsPixels:0.0} pixels · [EN]deviation {restoredFit.HoleRmsPixels:0.0} pixels"
                     : string.Empty;
             }
             _sessionPath = path; OutputPath = string.Empty;
-            _statusMessage = "已恢复标定图案、照片和曲线点，可继续编辑或重新反推。";
+            _statusMessage = "[EN]calibration[EN]、[EN]，[EN]。";
             RefreshCommands();
         });
     }

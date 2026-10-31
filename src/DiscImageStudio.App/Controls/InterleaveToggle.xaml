@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:DiscImageStudio.Controls">
     <!-- Shared CD-DA interleave switch. The label names the operation each site performs:
-         the export workspace switches generation ("启用 CD-DA 延迟交织"), the preview's
-         read-back switches the inverse operation ("逆交织"). Each site supplies the hint
+         the export workspace switches generation ("[EN] CD-DA Delayed interleaving"), the preview's
+         read-back switches the inverse operation ("Deinterleaved"). Each site supplies the hint
          for its own direction; the default points at the correlation between them. -->
     <StackPanel Orientation="Horizontal">
         <CheckBox x:Name="Toggle" VerticalAlignment="Center"

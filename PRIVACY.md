@@ -1,20 +1,20 @@
-# Disc Image Studio 隐私政策
+# Disc Image Studio  [EN] 
 
-生效日期：2026 年 8 月 21 日
+ [EN] ：2026  [EN]  8  [EN]  21  [EN] 
 
-Disc Image Studio（光盘绘图工坊）是一款完全在 Windows 设备本地运行的光盘镜像生成工具。
+Disc Image Studio（Optical Disc [EN] ） [EN]  Windows  [EN] Optical Disc [EN] 。
 
-## 数据处理
+##  [EN] 
 
-- 应用只读取用户主动选择的图片、文件夹、ISO 或原始音轨文件。
-- 应用只在用户指定的位置生成 ISO、RAW、PNG、BIN 和 JSON 文件。
-- 应用不包含网络通信功能，不会上传用户文件，不会收集遥测、广告标识符、位置、联系人、账户信息或其他个人信息。
-- 应用不使用第三方分析、广告或云存储服务。
+-  [EN] 、folder、ISO  [EN] audio track [EN] 。
+-  [EN]  ISO、RAW、PNG、BIN  [EN]  JSON  [EN] 。
+-  [EN] ， [EN] ， [EN] 、 [EN] 、 [EN] 、 [EN] 、 [EN] 。
+-  [EN] 、 [EN] 。
 
-用户可以随时通过 Windows 文件管理器删除应用生成的文件。卸载应用不会自动删除用户主动保存到文档目录或其他位置的输出文件。
+ [EN]  Windows  [EN] Delete [EN] 。 [EN] Delete [EN] Save [EN] directory [EN] 。
 
-如果未来版本增加联网、账户、遥测或其他数据处理功能，本政策会在发布该版本前更新，并在适用时征得用户同意。
+ [EN] 、 [EN] 、 [EN] ， [EN] ， [EN] 。
 
-## 联系方式
+##  [EN] 
 
-发布前请在此处替换为开发者的支持邮箱或网站地址，并将本政策发布到公开的 HTTPS 页面，然后把该页面地址填写到 Microsoft Partner Center。
+ [EN] ， [EN]  HTTPS  [EN] ， [EN]  Microsoft Partner Center。

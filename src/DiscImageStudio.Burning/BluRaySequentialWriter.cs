@@ -13,11 +13,11 @@ internal sealed class BluRayWriteException : IOException
     internal BluRayWriteException(uint startLba, int sectors, uint timeoutSeconds,
         TimeSpan elapsed, MmcCommandResult result, Exception? innerException = null,
         BluRayWriteDiagnostics? diagnostics = null)
-        : base($"蓝光 WRITE(10) 0x2A 失败：LBA={startLba:N0}，扇区={sectors}，"
-            + $"超时设置={timeoutSeconds} 秒，命令耗时={elapsed.TotalSeconds:F3} 秒；"
+        : base($"Blu-ray WRITE(10) 0x2A failed：LBA={startLba:N0}，sectors={sectors}，"
+            + $"[EN]={timeoutSeconds} seconds，[EN]={elapsed.TotalSeconds:F3} seconds；"
             + new MmcCommandException(0x2a, result).Message
-            + (result.Sense.Length == 0 ? " 无返回 Sense 数据。" : $" 原始 Sense={Convert.ToHexString(result.Sense)}。")
-            + " 未自动重试此写入命令。" + diagnostics?.Describe(), innerException)
+            + (result.Sense.Length == 0 ? " [EN] Sense [EN]。" : $" [EN] Sense={Convert.ToHexString(result.Sense)}。")
+            + " [EN]。" + diagnostics?.Describe(), innerException)
     {
         StartLba = startLba;
         SectorCount = sectors;
@@ -49,19 +49,19 @@ internal sealed record BluRayWriteDiagnostics(long AcceptedBytes, int AcceptedCo
     {
         StringBuilder text = new();
         text.AppendLine();
-        text.Append($"写入诊断：设备已接受 {AcceptedBytes:N0} 字节 / {AcceptedCommandCount:N0} 次命令；");
-        text.Append($"累计源流读取（含阻塞及块拷贝）={TotalSourceReadElapsed.TotalSeconds:F3} 秒，");
-        text.Append($"累计 WRITE 命令={TotalCommandElapsed.TotalSeconds:F3} 秒，");
-        text.AppendLine($"本次写入调用={SessionElapsed.TotalSeconds:F3} 秒（耗时累计包含失败尝试）。");
-        text.AppendLine($"失败块：源流读取={FailedCommand.SourceReadElapsed.TotalSeconds:F3} 秒，"
-            + $"WRITE={FailedCommand.CommandElapsed.TotalSeconds:F3} 秒。");
-        text.Append($"最近 {RecentSuccessfulCommands.Count} 次成功 WRITE（最多 8 次，按时间顺序）：");
+        text.Append($"[EN]：[EN] {AcceptedBytes:N0} bytes / {AcceptedCommandCount:N0} [EN]；");
+        text.Append($"[EN]（[EN]）={TotalSourceReadElapsed.TotalSeconds:F3} seconds，");
+        text.Append($"[EN] WRITE [EN]={TotalCommandElapsed.TotalSeconds:F3} seconds，");
+        text.AppendLine($"[EN]={SessionElapsed.TotalSeconds:F3} seconds（[EN]failed[EN]）。");
+        text.AppendLine($"failed[EN]：[EN]={FailedCommand.SourceReadElapsed.TotalSeconds:F3} seconds，"
+            + $"WRITE={FailedCommand.CommandElapsed.TotalSeconds:F3} seconds。");
+        text.Append($"Recent {RecentSuccessfulCommands.Count} [EN]succeeded WRITE（[EN] 8 [EN]，[EN]）：");
         foreach (BluRayWriteTiming command in RecentSuccessfulCommands)
         {
             text.AppendLine();
-            text.Append($"LBA={command.StartLba:N0}，扇区={command.SectorCount}，"
-                + $"源流读取={command.SourceReadElapsed.TotalSeconds:F3} 秒，"
-                + $"WRITE={command.CommandElapsed.TotalSeconds:F3} 秒");
+            text.Append($"LBA={command.StartLba:N0}，sectors={command.SectorCount}，"
+                + $"[EN]={command.SourceReadElapsed.TotalSeconds:F3} seconds，"
+                + $"WRITE={command.CommandElapsed.TotalSeconds:F3} seconds");
         }
         return text.ToString();
     }
@@ -100,7 +100,7 @@ internal static class BluRaySequentialWriter
         long length = (long)sectorCount * SectorBytes;
         content.Stat(out STATSTG stat, 1);
         if (stat.cbSize != length)
-            throw new ArgumentException("蓝光流长度与计划写入的扇区数不一致。", nameof(content));
+            throw new ArgumentException("Blu-ray[EN]Sector count[EN]。", nameof(content));
 
         using AlignedMmcWriteBuffer buffer = new(BytesPerWrite, transport.GetWriteTransferLimits());
         byte[] readBuffer = new byte[BytesPerWrite];
@@ -121,7 +121,7 @@ internal static class BluRaySequentialWriter
             // stream is forward-only and must begin at its declared byte zero.
             content.Seek(0, 1, countPointer);
             if (Marshal.ReadInt64(countPointer) != 0)
-                throw new ArgumentException("蓝光写入必须从源数据流的起始位置开始。", nameof(content));
+                throw new ArgumentException("Blu-ray[EN]must[EN]。", nameof(content));
             Publish(reportProgress, 0, length);
             for (uint lba = 0; lba < sectorCount; lba += SectorsPerWrite)
             {
@@ -204,7 +204,7 @@ internal static class BluRaySequentialWriter
             content.Read(readBuffer, requested, countPointer);
             int read = Marshal.ReadInt32(countPointer);
             if (read <= 0 || read > requested)
-                throw new EndOfStreamException($"蓝光流未提供完整写入块：已读取 {filled} / {BytesPerWrite} 字节，本次返回 {read} 字节。");
+                throw new EndOfStreamException($"Blu-ray[EN]：[EN] {filled} / {BytesPerWrite} bytes，[EN] {read} bytes。");
             Marshal.Copy(readBuffer, 0, IntPtr.Add(destination, filled), read);
             filled += read;
         }
@@ -224,7 +224,7 @@ internal static class BluRaySequentialWriter
     private static void ThrowIfCancelled(Func<bool>? isCancellationRequested)
     {
         if (isCancellationRequested?.Invoke() == true)
-            throw new OperationCanceledException("蓝光刻录已取消。");
+            throw new OperationCanceledException("Blu-ray burning cancelled.");
     }
 
     private static void Publish(Action<long, long>? reportProgress, long completed, long total)
@@ -237,13 +237,13 @@ internal static class BluRaySequentialWriter
         long acceptedBytes, TimeSpan sourceReadElapsed, TimeSpan commandElapsed, bool finalWindow)
     {
         double seconds = windowElapsed.TotalSeconds;
-        string rate = seconds > 0 ? $"{windowAcceptedBytes / seconds / 1_000_000.0:F3} MB/s" : "测量时间不足";
+        string rate = seconds > 0 ? $"{windowAcceptedBytes / seconds / 1_000_000.0:F3} MB/s" : "[EN]";
         string sourceShare = seconds > 0 ? $"{sourceReadElapsed.TotalSeconds / seconds * 100:F1}%" : "—";
         string commandShare = seconds > 0 ? $"{commandElapsed.TotalSeconds / seconds * 100:F1}%" : "—";
-        return $"BD 写入诊断{(finalWindow ? "（最后窗口）" : string.Empty)}：窗口 {seconds:F3} 秒，"
-            + $"设备接受速度={rate}；源流读取（含阻塞/拷贝）={sourceReadElapsed.TotalSeconds:F3} 秒（{sourceShare}），"
-            + $"WRITE（含传输/设备等待）={commandElapsed.TotalSeconds:F3} 秒（{commandShare}）；"
-            + $"累计接受={acceptedBytes:N0} 字节。源流读取耗时不是纯 CPU 生成耗时。";
+        return $"BD [EN]{(finalWindow ? "（[EN]）" : string.Empty)}：[EN] {seconds:F3} seconds，"
+            + $"[EN]={rate}；[EN]（[EN]/[EN]）={sourceReadElapsed.TotalSeconds:F3} seconds（{sourceShare}），"
+            + $"WRITE（[EN]/[EN]）={commandElapsed.TotalSeconds:F3} seconds（{commandShare}）；"
+            + $"[EN]={acceptedBytes:N0} bytes。[EN] CPU [EN]。";
     }
 
     private static void PublishDiagnostics(Action<string> reportDiagnostics, string message)
@@ -264,15 +264,15 @@ internal sealed class AlignedMmcWriteBuffer : IDisposable
     {
         ArgumentNullException.ThrowIfNull(limits);
         if (length <= 0 || length > limits.MaximumPageAlignedBytes)
-            throw new NotSupportedException($"刻录适配器的页对齐单次传输上限为 {limits.MaximumPageAlignedBytes:N0} 字节，"
-                + $"无法提交 {length:N0} 字节的完整蓝光写入块。");
+            throw new NotSupportedException($"Burn[EN] {limits.MaximumPageAlignedBytes:N0} bytes，"
+                + $"[EN] {length:N0} bytes[EN]Blu-ray[EN]。");
         // SDK docs call this both a mask and an alignment value. Aligning to
         // the next power of two above it satisfies either interpretation.
         ulong required = Math.Max((ulong)Environment.SystemPageSize, (ulong)limits.ByteAlignmentMask + 1);
         ulong alignment = 1;
         while (alignment < required) alignment <<= 1;
         if (alignment > int.MaxValue || (ulong)length + alignment - 1 > int.MaxValue)
-            throw new NotSupportedException("刻录适配器报告了无法支持的缓冲区对齐要求。");
+            throw new NotSupportedException("Burn[EN]。");
         _allocation = Marshal.AllocHGlobal(checked(length + (int)alignment - 1));
         ulong address = unchecked((ulong)_allocation.ToInt64());
         ulong aligned = (address + alignment - 1) & ~(alignment - 1);

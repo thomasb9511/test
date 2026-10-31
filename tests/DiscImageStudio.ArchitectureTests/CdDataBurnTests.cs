@@ -121,9 +121,9 @@ internal static class CdDataBurnTests
         }
         catch (InvalidOperationException exception)
         {
-            Require(exception.Message.Contains($"需要 {359_849:N0} 扇区")
-                && exception.Message.Contains($"实际可写 {359_843:N0} 扇区")
-                && exception.Message.Contains("超出 6 扇区")
+            Require(exception.Message.Contains($" [EN]  {359_849:N0} sectors")
+                && exception.Message.Contains($" [EN]  {359_843:N0} sectors")
+                && exception.Message.Contains("exceeds 6 sectors")
                 && exception.Message.Contains("MiB"),
                 "capacity failure reports required, available and missing sectors with binary size units");
         }

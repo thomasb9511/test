@@ -20,11 +20,11 @@ internal static class CdDataImageTests
     private static void RunInDirectory(string directory)
     {
         string data = Path.Combine(directory, "data");
-        Directory.CreateDirectory(Path.Combine(data, "资料"));
+        Directory.CreateDirectory(Path.Combine(data, " [EN] "));
         byte[] root = Enumerable.Range(0, 2591).Select(index => (byte)(index * 37)).ToArray();
         byte[] nested = Enumerable.Range(0, 17009).Select(index => (byte)(index * 17 + 9)).ToArray();
         File.WriteAllBytes(Path.Combine(data, "root.bin"), root);
-        File.WriteAllBytes(Path.Combine(data, "资料", "中文.bin"), nested);
+        File.WriteAllBytes(Path.Combine(data, " [EN] ", " [EN] .bin"), nested);
         File.WriteAllBytes(Path.Combine(data, "empty.txt"), []);
         string image = Path.Combine(directory, "source.png");
         WriteImage(image, solid: false);
@@ -46,7 +46,7 @@ internal static class CdDataImageTests
             Require(last is { Fraction: 1 } && last.CompletedBytes == iso.Length, "complete byte progress");
             Dictionary<string, Entry> entries = ReadJoliet(iso);
             Require(entries["root.bin"].Bytes.SequenceEqual(root), "root contents");
-            Require(entries["资料/中文.bin"].Bytes.SequenceEqual(nested), "Unicode nested contents");
+            Require(entries[" [EN] / [EN] .bin"].Bytes.SequenceEqual(nested), "Unicode nested contents");
             Require(entries["empty.txt"].Bytes.Length == 0, "zero-byte file");
             foreach (Entry entry in entries.Values.Where(entry => entry.Bytes.Length > 0))
                 Require(outer ? entry.Lba >= plan.DrawingEndLbaExclusive

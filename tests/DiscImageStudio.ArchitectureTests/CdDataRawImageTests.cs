@@ -163,10 +163,10 @@ internal static class CdDataRawImageTests
         try
         {
             string data = Path.Combine(directory, "files");
-            Directory.CreateDirectory(Path.Combine(data, "资料"));
-            File.WriteAllBytes(Path.Combine(data, "资料", "非整扇区.bin"),
+            Directory.CreateDirectory(Path.Combine(data, " [EN] "));
+            File.WriteAllBytes(Path.Combine(data, " [EN] ", " [EN] sectors.bin"),
                 Enumerable.Range(0, 17009).Select(index => (byte)(index * 71 + 3)).ToArray());
-            File.WriteAllText(Path.Combine(data, "readme.txt"), "CD DAO 文件模式：内圈与外圈内容一致。");
+            File.WriteAllText(Path.Combine(data, "readme.txt"), "CD DAO  [EN] ：Inner Ring [EN] Outer Ring [EN] 。");
             string picture = Path.Combine(directory, "source.png");
             byte[] pixels = Enumerable.Range(0, 16 * 16).Select(index => (byte)(index * 53)).ToArray();
             PngBitmapEncoder png = new();

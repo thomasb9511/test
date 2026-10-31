@@ -223,7 +223,7 @@ static void TestDiscPresets()
 
     CdDiscPresetDefinition cd80 = builtIn.CdPresets.Single(value => value.Id == "cd-80");
     True(
-        cd80.DisplayName.StartsWith("标准", StringComparison.Ordinal),
+        cd80.DisplayName.StartsWith("standard", StringComparison.Ordinal),
         "standard CD preset announces its standard nature");
     Equal(359_849L, cd80.Sectors, "80-minute CD preset sectors");
     Equal(
@@ -243,7 +243,7 @@ static void TestDiscPresets()
     DvdDiscPresetDefinition dvd120 = builtIn.DvdPresets.Single(
         value => value.Id == "dvd-5-120mm");
     True(
-        dvd120.DisplayName.StartsWith("标准", StringComparison.Ordinal),
+        dvd120.DisplayName.StartsWith("standard", StringComparison.Ordinal),
         "standard DVD preset announces its standard nature");
     Equal(2_295_104U, dvd120.TotalSectors, "120 mm DVD preset sectors");
     Equal(
@@ -262,11 +262,11 @@ static void TestDiscPresets()
     BluRayDiscPresetDefinition bdStandard = builtIn.BluRayPresets!.Single(
         value => value.Id == "bd-r-sl-25gb");
     True(
-        bdStandard.DisplayName.StartsWith("标准", StringComparison.Ordinal),
+        bdStandard.DisplayName.StartsWith("standard", StringComparison.Ordinal),
         "standard Blu-ray preset announces its standard nature");
     BluRayDiscPresetDefinition verbatimBd = builtIn.BluRayPresets!.Single(
         value => value.Id == "bd-r-verbatim-64099");
-    Equal("Verbatim BD-R (64099)（实测）", verbatimBd.DisplayName, "Verbatim BD-R 64099 preset name");
+    Equal("Verbatim BD-R (64099)（measured）", verbatimBd.DisplayName, "Verbatim BD-R 64099 preset name");
     Equal(12_219_392U, verbatimBd.TotalSectors, "Verbatim BD-R 64099 sectors");
     Equal(23.987042157339335, verbatimBd.InnerRadiusMm, "Verbatim BD-R 64099 saved inner radius");
     Equal(57.987960341783236, verbatimBd.OuterRadiusMm, "Verbatim BD-R 64099 saved outer radius");
@@ -292,7 +292,7 @@ static void TestDiscPresetJson()
         Equal(1, created.DvdPresets.Count, "initial user DVD preset count");
         Equal(1, created.BluRayPresets!.Count, "initial user Blu-ray preset count");
         True(
-            File.ReadAllText(path).Contains("自定义 DVD 参数", StringComparison.Ordinal),
+            File.ReadAllText(path).Contains("Custom DVD Profile", StringComparison.Ordinal),
             "initial user JSON keeps custom preset names readable");
         True(
             !File.ReadAllText(path).Contains("Verbatim DVD-R AZO (43533)", StringComparison.Ordinal),
@@ -333,8 +333,8 @@ static void TestDiscPresetJson()
             CdPresets = created.CdPresets
                 .Append(new CdDiscPresetDefinition(
                     "cd-80",
-                    "用户覆盖的 CD 80",
-                    "同 ID 的用户参数覆盖内置参数。",
+                    " [EN]  CD 80",
+                    " [EN]  ID  [EN] 。",
                     350_000,
                     24.6,
                     57.0))
@@ -371,7 +371,7 @@ static void TestDiscPresetJson()
             path,
             """
             {
-              // 用户可以为实测盘片留下说明。
+              //  [EN] measuredDisc Media [EN] 。
               "schemaVersion": 2,
               "cdPresets": [],
               "dvdPresets": [],
@@ -390,8 +390,8 @@ static void TestDiscPresetJson()
               "cdPresets": [
                 {
                   "id": "legacy-shape",
-                  "displayName": "旧结构",
-                  "description": "带保留字段的旧版本文件。",
+                  "displayName": " [EN] ",
+                  "description": " [EN] 。",
                   "sectors": 350000,
                   "innerRadiusMm": 24.5,
                   "outerRadiusMm": 57.0,
@@ -401,8 +401,8 @@ static void TestDiscPresetJson()
               "dvdPresets": [
                 {
                   "id": "legacy-dvd",
-                  "displayName": "旧 DVD 结构",
-                  "description": "带保留字段的旧版本文件。",
+                  "displayName": " [EN]  DVD  [EN] ",
+                  "description": " [EN] 。",
                   "totalSectors": 2295104,
                   "innerRadiusMm": 24.0,
                   "outerRadiusMm": 58.0,
@@ -430,8 +430,8 @@ static void TestDiscPresetJson()
               "cdPresets": [
                 {
                   "id": "interim-shape",
-                  "displayName": "临时结构",
-                  "description": "临时版本删掉了保留字段。",
+                  "displayName": " [EN] ",
+                  "description": " [EN] 。",
                   "sectors": 350000,
                   "innerRadiusMm": 24.5,
                   "outerRadiusMm": 57.0
@@ -440,8 +440,8 @@ static void TestDiscPresetJson()
               "dvdPresets": [
                 {
                   "id": "interim-dvd",
-                  "displayName": "临时 DVD 结构",
-                  "description": "临时版本删掉了保留字段。",
+                  "displayName": " [EN]  DVD  [EN] ",
+                  "description": " [EN] 。",
                   "totalSectors": 2295104,
                   "innerRadiusMm": 24.0,
                   "outerRadiusMm": 58.0
@@ -486,8 +486,8 @@ static void TestDiscPresetJson()
               "bluRayPresets": [
                 {
                   "id": "bad-bd",
-                  "displayName": "非法蓝光扇区",
-                  "description": "扇区数必须按 32 对齐。",
+                  "displayName": " [EN] Blu-raysectors",
+                  "description": "Sector countmust [EN]  32  [EN] 。",
                   "totalSectors": 1000,
                   "innerRadiusMm": 24.0,
                   "outerRadiusMm": 58.0
@@ -507,8 +507,8 @@ static void TestDiscPresetJson()
               "cdPresets": [
                 {
                   "id": "bad-velocity",
-                  "displayName": "非法线速度",
-                  "description": "线速度必须是大于 0 的有限数值。",
+                  "displayName": " [EN] Linear Velocity",
+                  "description": "Linear Velocitymust be a finite positive number。",
                   "sectors": 350000,
                   "innerRadiusMm": 24.5,
                   "outerRadiusMm": 57.0,
@@ -530,8 +530,8 @@ static void TestDiscPresetJson()
               "cdPresets": [
                 {
                   "id": "old-shape",
-                  "displayName": "旧结构",
-                  "description": "包含已移除的图片字段。",
+                  "displayName": " [EN] ",
+                  "description": " [EN] 。",
                   "sectors": 350000,
                   "innerRadiusMm": 24.5,
                   "outerRadiusMm": 57.0,
@@ -602,7 +602,7 @@ static void TestStreamingGeneration(string sourcePath)
     string hybridDirectory = Path.Combine(
         Path.GetDirectoryName(sourcePath)!,
         "hybrid-stream-data");
-    string nestedDirectory = Path.Combine(hybridDirectory, "资料");
+    string nestedDirectory = Path.Combine(hybridDirectory, " [EN] ");
     Directory.CreateDirectory(nestedDirectory);
     byte[] hybridFile = Enumerable.Range(0, 3001)
         .Select(index => (byte)((index * 73 + 19) % 251))
@@ -830,7 +830,7 @@ static void TestCdRawDaoCallOrder()
     catch (InvalidOperationException exception)
     {
         True(
-            exception.Message.Contains("超出盘片边界 4 个扇区", StringComparison.Ordinal),
+            exception.Message.Contains("exceedsDisc Media [EN]  4  sectors", StringComparison.Ordinal),
             "CD DAO capacity error reports exact lead-out excess");
         True(
             !excessiveOverburnSession.Calls.Contains(nameof(ICdRawSession.WriteMedia)),
